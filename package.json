@@ -8,6 +8,8 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "node --test",
+    "dashboard": "node dashboard.js",
+    "dashboard:watch": "node dashboard.js --watch",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"**/*.{ts,json,md}\""
   },
