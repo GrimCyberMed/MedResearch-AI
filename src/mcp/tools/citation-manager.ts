@@ -5,7 +5,6 @@
  */
 
 import https from 'https';
-import { URLSearchParams } from 'url';
 
 interface CitationManagementArgs {
   action: 'add' | 'get' | 'verify' | 'search' | 'delete';
@@ -119,7 +118,7 @@ async function verifyCitation(identifier: string): Promise<{ valid: boolean; met
  * Manage citations (simplified implementation - in production would use Zotero API)
  */
 export async function manageCitations(args: CitationManagementArgs) {
-  const { action, identifier, collection, citation_data } = args;
+  const { action, identifier } = args;
 
   try {
     switch (action) {

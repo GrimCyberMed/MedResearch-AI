@@ -10,12 +10,10 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 
 export class MemoryDatabase {
   private db: SqlJsDatabase | null = null;
-  private projectPath: string;
   private dbPath: string;
   private SQL: any;
 
   constructor(projectPath: string) {
-    this.projectPath = projectPath;
     
     // Ensure .memory directory exists
     const memoryDir = join(projectPath, '.memory');

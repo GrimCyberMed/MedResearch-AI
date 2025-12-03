@@ -16,14 +16,12 @@ import {
 
 export class CheckpointSystem {
   private memory: MemorySystem;
-  private projectPath: string;
   private checkpointDir: string;
   private sessionDir: string;
   private autoSaveInterval: NodeJS.Timeout | null = null;
 
   constructor(memory: MemorySystem, projectPath: string) {
     this.memory = memory;
-    this.projectPath = projectPath;
     this.checkpointDir = join(projectPath, '.memory', 'checkpoints');
     this.sessionDir = join(projectPath, '.session');
 
@@ -44,19 +42,17 @@ export class CheckpointSystem {
     state: CheckpointState,
     description?: string
   ): Promise<number> {
-    const database = this.memory['db'].getDatabase();
+    const db = this.memory['db'];
     
     // Save to database
-    const stmt = database.prepare(`
-      INSERT INTO session_checkpoints (checkpoint_type, phase_name, full_state, description)
-      VALUES (?, ?, ?, ?)
-    `);
-
-    const result = stmt.run(
-      type,
-      state.currentPhase,
-      JSON.stringify(state),
-      description || null
+    const result = db.run(
+      `INSERT INTO session_checkpoints (checkpoint_type, phase_name, full_state, description) VALUES (?, ?, ?, ?)`,
+      [
+        type,
+        state.currentPhase,
+        JSON.stringify(state),
+        description || null
+      ]
     );
 
     const checkpointId = result.lastInsertRowid as number;
@@ -105,9 +101,8 @@ export class CheckpointSystem {
     
     if (!existsSync(checkpointFile)) {
       // Try loading from database
-      const database = this.memory['db'].getDatabase();
-      const stmt = database.prepare('SELECT full_state FROM session_checkpoints WHERE id = ?');
-      const result = stmt.get(checkpointId) as SessionCheckpoint | undefined;
+      const db = this.memory['db'];
+      const result = db.get('SELECT full_state FROM session_checkpoints WHERE id = ?', [checkpointId]) as SessionCheckpoint | undefined;
       
       if (result) {
         return JSON.parse(result.full_state);
@@ -306,33 +301,26 @@ ${state.nextSteps.map((step, i) => `${i + 1}. ${step}`).join('\n')}
    * Get all checkpoints
    */
   async getAllCheckpoints(): Promise<SessionCheckpoint[]> {
-    const database = this.memory['db'].getDatabase();
-    const stmt = database.prepare('SELECT * FROM session_checkpoints ORDER BY created_at DESC');
-    return stmt.all() as SessionCheckpoint[];
+    const db = this.memory['db'];
+    return db.all('SELECT * FROM session_checkpoints ORDER BY created_at DESC') as SessionCheckpoint[];
   }
 
   /**
    * Delete old checkpoints (keep last N)
    */
   async cleanupOldCheckpoints(keepLast: number = 10): Promise<number> {
-    const database = this.memory['db'].getDatabase();
+    const db = this.memory['db'];
     
     // Get checkpoint IDs to delete
-    const stmt = database.prepare(`
-      SELECT id FROM session_checkpoints 
-      ORDER BY created_at DESC 
-      LIMIT -1 OFFSET ?
-    `);
-    const toDelete = stmt.all(keepLast) as { id: number }[];
+    const toDelete = db.all(`SELECT id FROM session_checkpoints ORDER BY created_at DESC LIMIT -1 OFFSET ?`, [keepLast]) as { id: number }[];
 
     if (toDelete.length === 0) {
       return 0;
     }
 
     // Delete from database
-    const deleteStmt = database.prepare('DELETE FROM session_checkpoints WHERE id = ?');
     for (const { id } of toDelete) {
-      deleteStmt.run(id);
+      db.run('DELETE FROM session_checkpoints WHERE id = ?', [id]);
       
       // Delete file if exists
       const checkpointFile = join(this.checkpointDir, `checkpoint-${id}.json`);

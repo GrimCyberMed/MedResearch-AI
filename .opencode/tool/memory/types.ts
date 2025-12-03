@@ -21,7 +21,7 @@ export interface ShortTermMemory {
   message_type: MessageType;
   content: string;
   agent_name?: string;
-  metadata?: Record<string, any>;
+  metadata?: string; // JSON string
 }
 
 // Working memory (current phase)

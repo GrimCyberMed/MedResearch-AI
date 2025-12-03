@@ -320,31 +320,31 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     switch (name) {
       // Medical Database Tools
       case 'search_pubmed':
-        return await searchPubMed(args);
+        return await searchPubMed(args as any);
       case 'search_europe_pmc':
-        return await searchEuropePMC(args);
+        return await searchEuropePMC(args as any);
 
       // R Statistics Tools
       case 'run_meta_analysis':
-        return await runMetaAnalysis(args);
+        return await runMetaAnalysis(args as any);
       case 'generate_forest_plot':
-        return await generateForestPlot(args);
+        return await generateForestPlot(args as any);
 
       // Citation Management Tools
       case 'manage_citations':
-        return await manageCitations(args);
+        return await manageCitations(args as any);
       case 'export_bibliography':
-        return await exportBibliography(args);
+        return await exportBibliography(args as any);
 
       // Document Generation Tools
       case 'generate_document':
-        return await generateDocument(args);
+        return await generateDocument(args as any);
       case 'export_to_pdf':
-        return await exportToPDF(args);
+        return await exportToPDF(args as any);
 
       // Open Access Tools
       case 'find_open_access':
-        return await findOpenAccess(args);
+        return await findOpenAccess(args as any);
 
       default:
         throw new Error(`Unknown tool: ${name}`);
