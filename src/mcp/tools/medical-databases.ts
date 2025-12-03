@@ -56,6 +56,33 @@ function httpsRequest(url: string): Promise<string> {
 export async function searchPubMed(args: PubMedSearchArgs) {
   const { query, max_results = 100, sort = 'relevance', filters = {} } = args;
 
+  // Validate inputs
+  if (!query || query.trim() === '') {
+    return {
+      content: [{
+        type: 'text',
+        text: JSON.stringify({
+          success: false,
+          error: 'Search query cannot be empty',
+        }, null, 2),
+      }],
+      isError: true,
+    };
+  }
+
+  if (max_results < 1 || max_results > 10000) {
+    return {
+      content: [{
+        type: 'text',
+        text: JSON.stringify({
+          success: false,
+          error: 'max_results must be between 1 and 10000',
+        }, null, 2),
+      }],
+      isError: true,
+    };
+  }
+
   try {
     // Build search query with filters
     let fullQuery = query;
@@ -198,6 +225,33 @@ export async function searchPubMed(args: PubMedSearchArgs) {
  */
 export async function searchEuropePMC(args: EuropePMCSearchArgs) {
   const { query, max_results = 100, include_preprints = true } = args;
+
+  // Validate inputs
+  if (!query || query.trim() === '') {
+    return {
+      content: [{
+        type: 'text',
+        text: JSON.stringify({
+          success: false,
+          error: 'Search query cannot be empty',
+        }, null, 2),
+      }],
+      isError: true,
+    };
+  }
+
+  if (max_results < 1 || max_results > 10000) {
+    return {
+      content: [{
+        type: 'text',
+        text: JSON.stringify({
+          success: false,
+          error: 'max_results must be between 1 and 10000',
+        }, null, 2),
+      }],
+      isError: true,
+    };
+  }
 
   try {
     // Build search query

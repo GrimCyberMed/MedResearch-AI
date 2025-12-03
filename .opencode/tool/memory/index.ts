@@ -38,6 +38,22 @@ export class MemorySystem {
    * Save to memory
    */
   async save(options: MemorySaveOptions): Promise<void> {
+    // Validate inputs
+    if (!options.tier) {
+      throw new Error('Memory tier is required');
+    }
+    if (!options.key || options.key.trim() === '') {
+      throw new Error('Memory key cannot be empty');
+    }
+    if (options.value === undefined || options.value === null) {
+      throw new Error('Memory value is required');
+    }
+    
+    const validTiers = ['short', 'working', 'long', 'episodic'];
+    if (!validTiers.includes(options.tier)) {
+      throw new Error(`Invalid tier: ${options.tier}. Must be one of: ${validTiers.join(', ')}`);
+    }
+    
     const { tier, category, key, value, metadata } = options;
 
     switch (tier) {
@@ -86,6 +102,14 @@ export class MemorySystem {
    * Retrieve from memory
    */
   async retrieve(query: MemoryQuery): Promise<MemoryItem[]> {
+    // Validate tier if specified
+    if (query.tier && query.tier !== 'all') {
+      const validTiers = ['short', 'working', 'long', 'episodic'];
+      if (!validTiers.includes(query.tier)) {
+        throw new Error(`Invalid tier: ${query.tier}. Must be one of: ${validTiers.join(', ')}, or 'all'`);
+      }
+    }
+    
     const results: MemoryItem[] = [];
     const tiers = query.tier === 'all' ? ['short', 'working', 'long', 'episodic'] : [query.tier || 'all'];
 

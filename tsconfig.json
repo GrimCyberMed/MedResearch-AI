@@ -22,7 +22,8 @@
     "types": ["node"]
   },
   "include": [
-    ".opencode/**/*.ts"
+    ".opencode/**/*.ts",
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",

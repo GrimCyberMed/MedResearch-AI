@@ -28,23 +28,34 @@
 
 ## 🎯 System Overview
 
-### **9-Agent Architecture**
+### **12 Specialized Agents**
+
+**Main Agents (9)**:
 1. **Master Agent** - Orchestrator + memory manager
 2. **Question Agent** - Research question refinement
 3. **Planner Agent** - Research planning
 4. **Protocol Agent** - PICO/SPIDER protocol
-5. **Research Agent** - Database search & screening
+5. **Research Agent** - Database search & screening coordination
 6. **Writer Agent** - Manuscript writing
 7. **Statistician Agent** - Meta-analysis
 8. **Bibliography Agent** - Citation management
 9. **Critique Agent** - Quality assurance + anti-hallucination
 
-### **5 MCP Servers (Tools)**
-1. **Medical Databases** - PubMed, Europe PMC, Lens, OpenAlex
-2. **R Statistics** - Meta-analysis, plots
-3. **Citation Management** - BibTeX, verification
-4. **Document Generation** - DOCX, PPTX
-5. **Unpaywall** - Legal PDF access
+**Sub-Agents (3)**:
+10. **Search Sub-Agent** - Database searching (PubMed, Europe PMC)
+11. **Screening Sub-Agent** - Title/abstract and full-text screening
+12. **Extraction Sub-Agent** - Data extraction and risk of bias assessment
+
+### **9 MCP Tools**
+1. **search_pubmed** - Search PubMed/MEDLINE database
+2. **search_europe_pmc** - Search Europe PMC with preprints
+3. **run_meta_analysis** - Execute meta-analysis using R
+4. **generate_forest_plot** - Create forest plot visualizations
+5. **manage_citations** - Verify and retrieve citation metadata
+6. **export_bibliography** - Export formatted bibliographies
+7. **generate_document** - Generate DOCX manuscripts
+8. **export_to_pdf** - Convert DOCX to PDF
+9. **find_open_access** - Find OA versions via Unpaywall
 
 ### **Memory System**
 - **Short-term** (current session)
@@ -162,8 +173,8 @@ MIT License - See LICENSE file for details
 ## 🎉 Status
 
 **Version**: 4.0.0  
-**Status**: ✅ Phase 1 Implementation In Progress  
-**Timeline**: 7-8 weeks to completion
+**Status**: ✅ Phase 3 Complete (100%)  
+**Production Status**: MVP Complete, Critical Fixes in Progress
 
 ---
 

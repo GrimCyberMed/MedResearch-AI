@@ -99,6 +99,20 @@ async function executeRScript(script: string): Promise<string> {
 export async function runMetaAnalysis(args: MetaAnalysisArgs) {
   const { data, effect_measure, model = 'random', method = 'REML' } = args;
 
+  // Validate inputs
+  if (!data || !Array.isArray(data)) {
+    return {
+      content: [{
+        type: 'text',
+        text: JSON.stringify({
+          success: false,
+          error: 'Data array is required for meta-analysis',
+        }, null, 2),
+      }],
+      isError: true,
+    };
+  }
+
   if (!data || data.length < 2) {
     return {
       content: [{

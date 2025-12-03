@@ -124,6 +124,20 @@ async function queryUnpaywall(doi: string, email: string): Promise<OAResult> {
 export async function findOpenAccess(args: UnpaywallArgs) {
   const { identifiers, email } = args;
 
+  // Validate identifiers
+  if (!identifiers || !Array.isArray(identifiers) || identifiers.length === 0) {
+    return {
+      content: [{
+        type: 'text',
+        text: JSON.stringify({
+          success: false,
+          error: 'At least one identifier (DOI or PMID) is required',
+        }, null, 2),
+      }],
+      isError: true,
+    };
+  }
+
   if (!email || !email.includes('@')) {
     return {
       content: [{
