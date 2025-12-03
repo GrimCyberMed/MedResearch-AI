@@ -8,6 +8,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "node --test",
+    "test:meta": "node test-meta-analysis.js",
     "dashboard": "node dashboard.js",
     "dashboard:watch": "node dashboard.js --watch",
     "lint": "eslint . --ext .ts",

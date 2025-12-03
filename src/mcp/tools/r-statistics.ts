@@ -255,6 +255,10 @@ export async function generateForestPlot(args: ForestPlotArgs) {
     const effects = result.studies.map((s: any) => s.effect);
     const ses = result.studies.map((s: any) => s.se);
 
+    // Escape backslashes in Windows paths for R
+    const escapedOutputPath = output_path.replace(/\\/g, '/');
+    const escapedTitle = title.replace(/"/g, '\\"');
+
     // Generate R script for forest plot
     const rScript = `
 # Load required packages
@@ -281,13 +285,13 @@ m <- metagen(
 )
 
 # Determine file type
-file_ext <- tolower(tools::file_ext("${output_path}"))
+file_ext <- tolower(tools::file_ext("${escapedOutputPath}"))
 
 # Open graphics device
 if (file_ext == "pdf") {
-  pdf("${output_path}", width = 10, height = 8)
+  pdf("${escapedOutputPath}", width = 10, height = 8)
 } else {
-  png("${output_path}", width = 1200, height = 960, res = 120)
+  png("${escapedOutputPath}", width = 1200, height = 960, res = 120)
 }
 
 # Generate forest plot
@@ -306,7 +310,7 @@ forest(
   leftcols = c("studlab", "effect", "ci"),
   leftlabs = c("Study", "Effect", "95% CI"),
   xlab = "Effect Size",
-  smlab = "${title}",
+  smlab = "${escapedTitle}",
   weight.study = "random",
   sortvar = TE
 )
@@ -314,7 +318,7 @@ forest(
 # Close graphics device
 dev.off()
 
-cat("Forest plot saved to: ${output_path}")
+cat("Forest plot saved to: ${escapedOutputPath}")
 `;
 
     const output = await executeRScript(rScript);
