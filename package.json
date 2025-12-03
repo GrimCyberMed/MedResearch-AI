@@ -1,0 +1,42 @@
+{
+  "name": "medresearch-ai",
+  "version": "4.0.0",
+  "description": "MedResearch AI - Multi-Agent System for Systematic Reviews with Memory & Anti-Hallucination",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "node --test",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write \"**/*.{ts,json,md}\""
+  },
+  "keywords": [
+    "medical-research",
+    "systematic-review",
+    "meta-analysis",
+    "ai-agents",
+    "opencode",
+    "prisma-2020"
+  ],
+  "author": "MedResearch AI Team",
+  "license": "MIT",
+  "dependencies": {
+    "date-fns": "^3.6.0",
+    "sql.js": "^1.13.0",
+    "uuid": "^9.0.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "@types/uuid": "^9.0.7",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+build/
+*.js
+*.js.map
+*.d.ts
+*.d.ts.map
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Research project data (keep structure, ignore data)
+research-projects/*/01-search/*.bib
+research-projects/*/01-search/*.ris
+research-projects/*/07-pdfs/*.pdf
+research-projects/*/.memory/*.db
+research-projects/*/.memory/checkpoints/*.json
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+
+# Test coverage
+coverage/
+.nyc_output/
