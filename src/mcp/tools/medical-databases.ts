@@ -6,6 +6,10 @@
 
 import https from 'https';
 import { URLSearchParams } from 'url';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 interface PubMedSearchArgs {
   query: string;
@@ -112,6 +116,11 @@ export async function searchPubMed(args: PubMedSearchArgs) {
       sort: sort === 'date' ? 'pub_date' : sort === 'author' ? 'author' : 'relevance',
     });
 
+    // Add API key if available (increases rate limit from 3 to 10 req/sec)
+    if (process.env.PUBMED_API_KEY) {
+      searchParams.append('api_key', process.env.PUBMED_API_KEY);
+    }
+
     const searchUrl = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?${searchParams}`;
     const searchData = await httpsRequest(searchUrl);
     const searchResult = JSON.parse(searchData);
@@ -154,6 +163,11 @@ export async function searchPubMed(args: PubMedSearchArgs) {
       id: pmids.join(','),
       retmode: 'xml',
     });
+
+    // Add API key if available
+    if (process.env.PUBMED_API_KEY) {
+      fetchParams.append('api_key', process.env.PUBMED_API_KEY);
+    }
 
     const fetchUrl = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?${fetchParams}`;
     const fetchData = await httpsRequest(fetchUrl);

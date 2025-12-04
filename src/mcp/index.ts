@@ -2,7 +2,7 @@
  * MedResearch AI - MCP Server
  * 
  * Model Context Protocol server providing tools for systematic reviews:
- * - Medical database searching (PubMed, Europe PMC)
+ * - Medical database searching (PubMed, Europe PMC, Semantic Scholar, The Lens, ClinicalTrials.gov, CrossRef)
  * - R statistics integration (meta-analysis)
  * - Citation management (Zotero)
  * - Document generation (DOCX, PDF)
@@ -19,10 +19,16 @@ import {
 
 // Import tool implementations
 import { searchPubMed, searchEuropePMC } from './tools/medical-databases.js';
+import { searchSemanticScholar, getSemanticScholarPaper } from './tools/semantic-scholar.js';
+import { searchLens, getLensWork } from './tools/lens.js';
+import { searchClinicalTrials, getClinicalTrial } from './tools/clinicaltrials.js';
+import { searchCrossRef, getCrossRefWork } from './tools/crossref.js';
 import { runMetaAnalysis, generateForestPlot } from './tools/r-statistics.js';
 import { manageCitations, exportBibliography } from './tools/citation-manager.js';
 import { generateDocument, exportToPDF } from './tools/document-generator.js';
 import { findOpenAccess } from './tools/unpaywall.js';
+import { checkPlagiarism, compareDocuments } from './tools/plagiarism-detection.js';
+import { checkPlagiarismAcrossDatabases } from './tools/plagiarism-database-integration.js';
 
 /**
  * Tool definitions for MCP
@@ -85,6 +91,226 @@ const TOOLS: Tool[] = [
         },
       },
       required: ['query'],
+    },
+  },
+  {
+    name: 'search_semantic_scholar',
+    description: 'Search Semantic Scholar database with 200M+ papers, AI-powered relevance ranking, and citation context',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        query: {
+          type: 'string',
+          description: 'Search query (supports year:, fieldsOfStudy:, publicationTypes: filters)',
+        },
+        max_results: {
+          type: 'number',
+          description: 'Maximum number of results to return (default: 100, max: 10000)',
+          default: 100,
+        },
+        year_from: {
+          type: 'number',
+          description: 'Start year for publication date filter',
+        },
+        year_to: {
+          type: 'number',
+          description: 'End year for publication date filter',
+        },
+        fields_of_study: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Fields of study filter (e.g., ["Medicine", "Biology"])',
+        },
+        publication_types: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Publication types (e.g., ["JournalArticle", "Review"])',
+        },
+        open_access_only: {
+          type: 'boolean',
+          description: 'Return only open access papers',
+          default: false,
+        },
+      },
+      required: ['query'],
+    },
+  },
+  {
+    name: 'get_semantic_scholar_paper',
+    description: 'Get detailed paper information from Semantic Scholar by ID (DOI, PMID, ArXiv, or Semantic Scholar ID)',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        paper_id: {
+          type: 'string',
+          description: 'Paper identifier (DOI, PMID, ArXiv ID, or Semantic Scholar ID)',
+        },
+      },
+      required: ['paper_id'],
+    },
+  },
+  {
+    name: 'search_lens',
+    description: 'Search The Lens database with 250M+ scholarly works, patents, and clinical trials',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        query: {
+          type: 'string',
+          description: 'Search query',
+        },
+        max_results: {
+          type: 'number',
+          description: 'Maximum number of results to return (default: 100, max: 1000)',
+          default: 100,
+        },
+        year_from: {
+          type: 'number',
+          description: 'Start year for publication date filter',
+        },
+        year_to: {
+          type: 'number',
+          description: 'End year for publication date filter',
+        },
+        include_patents: {
+          type: 'boolean',
+          description: 'Include patents in results',
+          default: false,
+        },
+        open_access_only: {
+          type: 'boolean',
+          description: 'Return only open access works',
+          default: false,
+        },
+        source_types: {
+          type: 'array',
+          items: { type: 'string', enum: ['journal', 'conference', 'book', 'preprint', 'other'] },
+          description: 'Source types to include',
+        },
+      },
+      required: ['query'],
+    },
+  },
+  {
+    name: 'get_lens_work',
+    description: 'Get detailed work information from The Lens by Lens ID',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        lens_id: {
+          type: 'string',
+          description: 'The Lens work identifier',
+        },
+      },
+      required: ['lens_id'],
+    },
+  },
+  {
+    name: 'search_clinicaltrials',
+    description: 'Search ClinicalTrials.gov database with 450K+ clinical trials worldwide',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        query: {
+          type: 'string',
+          description: 'Search query (condition, intervention, or disease)',
+        },
+        max_results: {
+          type: 'number',
+          description: 'Maximum number of results to return (default: 100, max: 10000)',
+          default: 100,
+        },
+        status: {
+          type: 'array',
+          items: { type: 'string', enum: ['RECRUITING', 'NOT_YET_RECRUITING', 'COMPLETED', 'TERMINATED', 'SUSPENDED', 'WITHDRAWN'] },
+          description: 'Trial status filter',
+        },
+        phase: {
+          type: 'array',
+          items: { type: 'string', enum: ['EARLY_PHASE1', 'PHASE1', 'PHASE2', 'PHASE3', 'PHASE4'] },
+          description: 'Trial phase filter',
+        },
+        study_type: {
+          type: 'array',
+          items: { type: 'string', enum: ['INTERVENTIONAL', 'OBSERVATIONAL', 'EXPANDED_ACCESS'] },
+          description: 'Study type filter',
+        },
+        country: {
+          type: 'string',
+          description: 'Country filter (e.g., "United States")',
+        },
+      },
+      required: ['query'],
+    },
+  },
+  {
+    name: 'get_clinical_trial',
+    description: 'Get detailed clinical trial information by NCT ID',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        nct_id: {
+          type: 'string',
+          description: 'ClinicalTrials.gov NCT identifier (e.g., NCT04280705)',
+        },
+      },
+      required: ['nct_id'],
+    },
+  },
+  {
+    name: 'search_crossref',
+    description: 'Search CrossRef database with 150M+ DOI metadata and citation information',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        query: {
+          type: 'string',
+          description: 'Search query',
+        },
+        max_results: {
+          type: 'number',
+          description: 'Maximum number of results to return (default: 100, max: 10000)',
+          default: 100,
+        },
+        year_from: {
+          type: 'number',
+          description: 'Start year for publication date filter',
+        },
+        year_to: {
+          type: 'number',
+          description: 'End year for publication date filter',
+        },
+        type: {
+          type: 'array',
+          items: { type: 'string', enum: ['journal-article', 'book-chapter', 'proceedings-article', 'dataset', 'preprint'] },
+          description: 'Publication type filter',
+        },
+        has_full_text: {
+          type: 'boolean',
+          description: 'Return only works with full text',
+          default: false,
+        },
+        has_abstract: {
+          type: 'boolean',
+          description: 'Return only works with abstract',
+          default: false,
+        },
+      },
+      required: ['query'],
+    },
+  },
+  {
+    name: 'get_crossref_work',
+    description: 'Get detailed work information from CrossRef by DOI',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        doi: {
+          type: 'string',
+          description: 'DOI identifier',
+        },
+      },
+      required: ['doi'],
     },
   },
 
@@ -284,6 +510,145 @@ const TOOLS: Tool[] = [
       required: ['identifiers', 'email'],
     },
   },
+
+  // Plagiarism Detection Tools
+  {
+    name: 'check_plagiarism',
+    description: 'Check document for plagiarism using w-shingling, Jaccard similarity, and text fingerprinting algorithms',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        text: {
+          type: 'string',
+          description: 'Document text to check for plagiarism',
+        },
+        title: {
+          type: 'string',
+          description: 'Document title (optional)',
+        },
+        author: {
+          type: 'string',
+          description: 'Document author (optional)',
+        },
+        config: {
+          type: 'object',
+          properties: {
+            shingleSize: {
+              type: 'number',
+              description: 'Size of text shingles (n-grams) for comparison (default: 5)',
+              default: 5,
+            },
+            minSimilarityThreshold: {
+              type: 'number',
+              description: 'Minimum similarity threshold (0-1) to report matches (default: 0.15)',
+              default: 0.15,
+            },
+            maxResults: {
+              type: 'number',
+              description: 'Maximum number of matches to return (default: 10)',
+              default: 10,
+            },
+            checkCitations: {
+              type: 'boolean',
+              description: 'Check for citation patterns (default: true)',
+              default: true,
+            },
+            checkSelfPlagiarism: {
+              type: 'boolean',
+              description: 'Check for self-plagiarism (default: true)',
+              default: true,
+            },
+          },
+        },
+        databases: {
+          type: 'array',
+          items: { type: 'string', enum: ['pubmed', 'europepmc', 'semanticscholar', 'lens', 'crossref'] },
+          description: 'Databases to search for matches (default: all)',
+        },
+      },
+      required: ['text'],
+    },
+  },
+  {
+    name: 'compare_documents',
+    description: 'Compare two documents directly for similarity using Jaccard coefficient and matched segment analysis',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        document1: {
+          type: 'string',
+          description: 'First document text',
+        },
+        document2: {
+          type: 'string',
+          description: 'Second document text',
+        },
+        shingleSize: {
+          type: 'number',
+          description: 'Size of text shingles (n-grams) for comparison (default: 5)',
+          default: 5,
+        },
+      },
+      required: ['document1', 'document2'],
+    },
+  },
+  {
+    name: 'check_plagiarism_databases',
+    description: 'Check document for plagiarism across all 7 medical research databases (PubMed, Europe PMC, Semantic Scholar, The Lens, ClinicalTrials.gov, CrossRef, Unpaywall)',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        text: {
+          type: 'string',
+          description: 'Document text to check for plagiarism',
+        },
+        title: {
+          type: 'string',
+          description: 'Document title (optional)',
+        },
+        author: {
+          type: 'string',
+          description: 'Document author (optional)',
+        },
+        config: {
+          type: 'object',
+          properties: {
+            shingleSize: {
+              type: 'number',
+              description: 'Size of text shingles (n-grams) for comparison (default: 5)',
+              default: 5,
+            },
+            minSimilarityThreshold: {
+              type: 'number',
+              description: 'Minimum similarity threshold (0-1) to report matches (default: 0.15)',
+              default: 0.15,
+            },
+            maxResults: {
+              type: 'number',
+              description: 'Maximum number of matches to return (default: 10)',
+              default: 10,
+            },
+            checkCitations: {
+              type: 'boolean',
+              description: 'Check for citation patterns (default: true)',
+              default: true,
+            },
+            checkSelfPlagiarism: {
+              type: 'boolean',
+              description: 'Check for self-plagiarism (default: true)',
+              default: true,
+            },
+          },
+        },
+        databases: {
+          type: 'array',
+          items: { type: 'string', enum: ['pubmed', 'europepmc', 'semanticscholar', 'lens', 'crossref'] },
+          description: 'Databases to search for matches (default: all)',
+        },
+      },
+      required: ['text'],
+    },
+  },
 ];
 
 /**
@@ -323,6 +688,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return await searchPubMed(args as any);
       case 'search_europe_pmc':
         return await searchEuropePMC(args as any);
+      case 'search_semantic_scholar':
+        return await searchSemanticScholar(args as any);
+      case 'get_semantic_scholar_paper':
+        return await getSemanticScholarPaper(args as any);
+      case 'search_lens':
+        return await searchLens(args as any);
+      case 'get_lens_work':
+        return await getLensWork(args as any);
+      case 'search_clinicaltrials':
+        return await searchClinicalTrials(args as any);
+      case 'get_clinical_trial':
+        return await getClinicalTrial(args as any);
+      case 'search_crossref':
+        return await searchCrossRef(args as any);
+      case 'get_crossref_work':
+        return await getCrossRefWork(args as any);
 
       // R Statistics Tools
       case 'run_meta_analysis':
@@ -345,6 +726,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       // Open Access Tools
       case 'find_open_access':
         return await findOpenAccess(args as any);
+
+      // Plagiarism Detection Tools
+      case 'check_plagiarism':
+        return await checkPlagiarism(args as any);
+      case 'compare_documents':
+        return await compareDocuments(args as any);
+      case 'check_plagiarism_databases':
+        return await checkPlagiarismAcrossDatabases(args as any);
 
       default:
         throw new Error(`Unknown tool: ${name}`);
