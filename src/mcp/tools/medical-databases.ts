@@ -2,11 +2,23 @@
  * Medical Database Tools
  * 
  * Tools for searching PubMed/MEDLINE and Europe PMC databases
+ * 
+ * Enhanced with:
+ * - Retry logic for transient failures
+ * - Caching for improved performance
+ * - Input validation with Zod
+ * - Structured logging
+ * 
+ * @version 4.1.0
  */
 
 import https from 'https';
 import { URLSearchParams } from 'url';
 import dotenv from 'dotenv';
+import { logger } from '../../common/logger.js';
+import { withRetry } from '../../common/retry.js';
+import { defaultCache, generateCacheKey } from '../../common/cache.js';
+import { DatabaseSchemas, validateSafe } from '../../common/validation.js';
 
 // Load environment variables
 dotenv.config();
@@ -42,50 +54,75 @@ interface SearchResult {
 }
 
 /**
- * Make HTTPS request helper
+ * Make HTTPS request helper with retry logic
  */
-function httpsRequest(url: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      let data = '';
-      res.on('data', (chunk) => data += chunk);
-      res.on('end', () => resolve(data));
-    }).on('error', reject);
-  });
+async function httpsRequest(url: string): Promise<string> {
+  return withRetry(
+    () => new Promise<string>((resolve, reject) => {
+      const startTime = Date.now();
+      
+      https.get(url, (res) => {
+        let data = '';
+        
+        res.on('data', (chunk) => data += chunk);
+        
+        res.on('end', () => {
+          const duration = Date.now() - startTime;
+          logger.debug('HTTPS request completed', { 
+            url: url.substring(0, 100), 
+            duration,
+            statusCode: res.statusCode 
+          });
+          resolve(data);
+        });
+      }).on('error', (error) => {
+        logger.error('HTTPS request failed', { 
+          url: url.substring(0, 100), 
+          error: error.message 
+        });
+        reject(error);
+      });
+    }),
+    { maxRetries: 3, initialDelay: 1000 }
+  );
 }
 
 /**
  * Search PubMed/MEDLINE database
+ * Enhanced with validation, caching, retry logic, and logging
  */
 export async function searchPubMed(args: PubMedSearchArgs) {
-  const { query, max_results = 100, sort = 'relevance', filters = {} } = args;
-
-  // Validate inputs
-  if (!query || query.trim() === '') {
+  const startTime = Date.now();
+  
+  // Validate inputs with Zod
+  const validation = validateSafe(DatabaseSchemas.pubmedSearch, args);
+  if (!validation.success) {
+    logger.warn('PubMed search validation failed', { error: validation.error });
     return {
       content: [{
         type: 'text',
         text: JSON.stringify({
           success: false,
-          error: 'Search query cannot be empty',
+          error: validation.error,
         }, null, 2),
       }],
       isError: true,
     };
   }
-
-  if (max_results < 1 || max_results > 10000) {
-    return {
-      content: [{
-        type: 'text',
-        text: JSON.stringify({
-          success: false,
-          error: 'max_results must be between 1 and 10000',
-        }, null, 2),
-      }],
-      isError: true,
-    };
+  
+  const { query, max_results = 100, sort = 'relevance', filters = {} } = validation.data;
+  
+  // Generate cache key
+  const cacheKey = generateCacheKey('pubmed', { query, max_results, sort, filters });
+  
+  // Try cache first
+  const cached = defaultCache.get(cacheKey);
+  if (cached) {
+    logger.info('PubMed search cache hit', { query: query.substring(0, 50), cacheKey });
+    return cached as any;
   }
+  
+  logger.info('PubMed search started', { query: query.substring(0, 50), max_results });
 
   try {
     // Build search query with filters
@@ -205,7 +242,7 @@ export async function searchPubMed(args: PubMedSearchArgs) {
       }
     }
 
-    return {
+    const response = {
       content: [{
         type: 'text',
         text: JSON.stringify({
@@ -217,9 +254,31 @@ export async function searchPubMed(args: PubMedSearchArgs) {
         }, null, 2),
       }],
     };
+    
+    // Cache the response (5 minutes TTL)
+    defaultCache.set(cacheKey, response, 300);
+    
+    const duration = Date.now() - startTime;
+    logger.info('PubMed search completed', { 
+      query: query.substring(0, 50),
+      count: totalCount,
+      retrieved: results.length,
+      duration,
+      cached: true
+    });
+    
+    return response;
 
   } catch (error) {
+    const duration = Date.now() - startTime;
     const errorMessage = error instanceof Error ? error.message : String(error);
+    
+    logger.error('PubMed search failed', { 
+      query: query.substring(0, 50),
+      error: errorMessage,
+      duration
+    });
+    
     return {
       content: [{
         type: 'text',
@@ -236,36 +295,40 @@ export async function searchPubMed(args: PubMedSearchArgs) {
 
 /**
  * Search Europe PMC database
+ * Enhanced with validation, caching, retry logic, and logging
  */
 export async function searchEuropePMC(args: EuropePMCSearchArgs) {
-  const { query, max_results = 100, include_preprints = true } = args;
-
-  // Validate inputs
-  if (!query || query.trim() === '') {
+  const startTime = Date.now();
+  
+  // Validate inputs with Zod
+  const validation = validateSafe(DatabaseSchemas.europePmcSearch, args);
+  if (!validation.success) {
+    logger.warn('Europe PMC search validation failed', { error: validation.error });
     return {
       content: [{
         type: 'text',
         text: JSON.stringify({
           success: false,
-          error: 'Search query cannot be empty',
+          error: validation.error,
         }, null, 2),
       }],
       isError: true,
     };
   }
-
-  if (max_results < 1 || max_results > 10000) {
-    return {
-      content: [{
-        type: 'text',
-        text: JSON.stringify({
-          success: false,
-          error: 'max_results must be between 1 and 10000',
-        }, null, 2),
-      }],
-      isError: true,
-    };
+  
+  const { query, max_results = 100, include_preprints = true } = validation.data;
+  
+  // Generate cache key
+  const cacheKey = generateCacheKey('europepmc', { query, max_results, include_preprints });
+  
+  // Try cache first
+  const cached = defaultCache.get(cacheKey);
+  if (cached) {
+    logger.info('Europe PMC search cache hit', { query: query.substring(0, 50), cacheKey });
+    return cached as any;
   }
+  
+  logger.info('Europe PMC search started', { query: query.substring(0, 50), max_results });
 
   try {
     // Build search query
@@ -317,7 +380,7 @@ export async function searchEuropePMC(args: EuropePMCSearchArgs) {
       url: `https://europepmc.org/article/${article.source}/${article.id}`,
     }));
 
-    return {
+    const response = {
       content: [{
         type: 'text',
         text: JSON.stringify({
@@ -330,9 +393,31 @@ export async function searchEuropePMC(args: EuropePMCSearchArgs) {
         }, null, 2),
       }],
     };
+    
+    // Cache the response (5 minutes TTL)
+    defaultCache.set(cacheKey, response, 300);
+    
+    const duration = Date.now() - startTime;
+    logger.info('Europe PMC search completed', { 
+      query: query.substring(0, 50),
+      count: totalCount,
+      retrieved: results.length,
+      duration,
+      cached: true
+    });
+    
+    return response;
 
   } catch (error) {
+    const duration = Date.now() - startTime;
     const errorMessage = error instanceof Error ? error.message : String(error);
+    
+    logger.error('Europe PMC search failed', { 
+      query: query.substring(0, 50),
+      error: errorMessage,
+      duration
+    });
+    
     return {
       content: [{
         type: 'text',

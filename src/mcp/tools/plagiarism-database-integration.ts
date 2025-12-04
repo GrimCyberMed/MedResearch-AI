@@ -10,7 +10,10 @@
  * - CrossRef (150M+ DOI metadata)
  * - Unpaywall (open access)
  * 
- * @version 1.0.0
+ * Enhanced with:
+ * - Structured logging for debugging
+ * 
+ * @version 1.1.0
  */
 
 import { searchPubMed } from './medical-databases.js';
@@ -24,6 +27,7 @@ import {
   PlagiarismConfig,
   MatchedSegment 
 } from './plagiarism-detection.js';
+import { logger } from '../../common/logger.js';
 
 /**
  * Database search result for plagiarism checking
@@ -229,7 +233,7 @@ async function searchPubMedForPlagiarism(
       }
     }
   } catch (error) {
-    console.error('PubMed search error:', error);
+    logger.error('PubMed search error', { error: error instanceof Error ? error.message : String(error) });
   }
   
   return results;
@@ -271,7 +275,7 @@ async function searchEuropePMCForPlagiarism(
       }
     }
   } catch (error) {
-    console.error('Europe PMC search error:', error);
+    logger.error('Europe PMC search error', { error: error instanceof Error ? error.message : String(error) });
   }
   
   return results;
@@ -312,7 +316,7 @@ async function searchSemanticScholarForPlagiarism(
       }
     }
   } catch (error) {
-    console.error('Semantic Scholar search error:', error);
+    logger.error('Semantic Scholar search error', { error: error instanceof Error ? error.message : String(error) });
   }
   
   return results;
@@ -353,7 +357,7 @@ async function searchLensForPlagiarism(
       }
     }
   } catch (error) {
-    console.error('The Lens search error:', error);
+    logger.error('The Lens search error', { error: error instanceof Error ? error.message : String(error) });
   }
   
   return results;
@@ -394,7 +398,7 @@ async function searchCrossRefForPlagiarism(
       }
     }
   } catch (error) {
-    console.error('CrossRef search error:', error);
+    logger.error('CrossRef search error', { error: error instanceof Error ? error.message : String(error) });
   }
   
   return results;
@@ -484,53 +488,52 @@ export async function checkPlagiarismAcrossDatabases(args: {
     const tokens = preprocessText(text);
     const keyPhrases = extractKeyPhrases(tokens, 5);
     
-    console.log(`Extracted ${keyPhrases.length} key phrases for searching`);
-    console.log('Key phrases:', keyPhrases);
+    logger.info('Extracted key phrases for searching', { count: keyPhrases.length, phrases: keyPhrases.slice(0, 3) });
     
     // Search across all enabled databases
     const allResults: DatabaseSearchResult[] = [];
     
     if (databases.includes('pubmed')) {
-      console.log('Searching PubMed...');
+      logger.info('Searching PubMed for plagiarism matches');
       const pubmedResults = await searchPubMedForPlagiarism(keyPhrases, fullConfig.maxResults);
       allResults.push(...pubmedResults);
-      console.log(`Found ${pubmedResults.length} PubMed results`);
+      logger.info('PubMed search completed', { results: pubmedResults.length });
     }
     
     if (databases.includes('europepmc')) {
-      console.log('Searching Europe PMC...');
+      logger.info('Searching Europe PMC for plagiarism matches');
       const europeResults = await searchEuropePMCForPlagiarism(keyPhrases, fullConfig.maxResults);
       allResults.push(...europeResults);
-      console.log(`Found ${europeResults.length} Europe PMC results`);
+      logger.info('Europe PMC search completed', { results: europeResults.length });
     }
     
     if (databases.includes('semanticscholar')) {
-      console.log('Searching Semantic Scholar...');
+      logger.info('Searching Semantic Scholar for plagiarism matches');
       const semanticResults = await searchSemanticScholarForPlagiarism(keyPhrases, fullConfig.maxResults);
       allResults.push(...semanticResults);
-      console.log(`Found ${semanticResults.length} Semantic Scholar results`);
+      logger.info('Semantic Scholar search completed', { results: semanticResults.length });
     }
     
     if (databases.includes('lens')) {
-      console.log('Searching The Lens...');
+      logger.info('Searching The Lens for plagiarism matches');
       const lensResults = await searchLensForPlagiarism(keyPhrases, fullConfig.maxResults);
       allResults.push(...lensResults);
-      console.log(`Found ${lensResults.length} Lens results`);
+      logger.info('The Lens search completed', { results: lensResults.length });
     }
     
     if (databases.includes('crossref')) {
-      console.log('Searching CrossRef...');
+      logger.info('Searching CrossRef for plagiarism matches');
       const crossrefResults = await searchCrossRefForPlagiarism(keyPhrases, fullConfig.maxResults);
       allResults.push(...crossrefResults);
-      console.log(`Found ${crossrefResults.length} CrossRef results`);
+      logger.info('CrossRef search completed', { results: crossrefResults.length });
     }
     
-    console.log(`Total database results: ${allResults.length}`);
+    logger.info('All database searches completed', { totalResults: allResults.length });
     
     // Compare document with all results
     const matches = compareWithDatabaseResults(text, allResults, fullConfig);
     
-    console.log(`Found ${matches.length} matches above threshold`);
+    logger.info('Plagiarism comparison completed', { matches: matches.length, threshold: fullConfig.minSimilarityThreshold });
     
     // Calculate overall similarity (highest match)
     const overallSimilarity = matches.length > 0

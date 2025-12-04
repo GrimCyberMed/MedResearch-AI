@@ -16,6 +16,7 @@ import {
   ListToolsRequestSchema,
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
+import { logger } from '../common/logger.js';
 
 // Import tool implementations
 import { searchPubMed, searchEuropePMC } from './tools/medical-databases.js';
@@ -762,6 +763,7 @@ async function main() {
 }
 
 main().catch((error) => {
+  logger.error('Fatal error in main()', { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined });
   console.error('Fatal error in main():', error);
   process.exit(1);
 });

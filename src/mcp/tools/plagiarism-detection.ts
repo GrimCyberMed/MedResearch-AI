@@ -12,10 +12,15 @@
  * - CrossRef Similarity Check
  * - Academic plagiarism detection best practices
  * 
- * @version 1.0.0
+ * Enhanced with:
+ * - Structured logging for debugging
+ * - Performance tracking
+ * 
+ * @version 1.1.0
  */
 
 import crypto from 'crypto';
+import { logger } from '../../common/logger.js';
 
 /**
  * Configuration for plagiarism detection
@@ -269,6 +274,8 @@ export async function checkPlagiarism(args: {
   config?: Partial<PlagiarismConfig>;
   databases?: string[];
 }) {
+  const startTime = Date.now();
+  
   const {
     text,
     title = 'Untitled Document',
@@ -285,6 +292,13 @@ export async function checkPlagiarism(args: {
     checkCitations: config.checkCitations !== false,
     checkSelfPlagiarism: config.checkSelfPlagiarism !== false,
   };
+  
+  logger.info('Plagiarism check started', { 
+    title: title.substring(0, 50),
+    textLength: text.length,
+    databases: databases.join(','),
+    config: fullConfig
+  });
   
   try {
     // Preprocess text
@@ -312,6 +326,14 @@ export async function checkPlagiarism(args: {
       timestamp: new Date().toISOString(),
     };
     
+    const duration = Date.now() - startTime;
+    logger.info('Plagiarism check completed', { 
+      title: title.substring(0, 50),
+      totalMatches: matches.length,
+      highConfidence: report.highConfidenceMatches,
+      duration
+    });
+    
     return {
       content: [{
         type: 'text',
@@ -333,12 +355,21 @@ export async function checkPlagiarism(args: {
     };
     
   } catch (error) {
+    const duration = Date.now() - startTime;
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    
+    logger.error('Plagiarism check failed', { 
+      title: title.substring(0, 50),
+      error: errorMessage,
+      duration
+    });
+    
     return {
       content: [{
         type: 'text',
         text: JSON.stringify({
           success: false,
-          error: error instanceof Error ? error.message : 'Unknown error occurred',
+          error: errorMessage,
         }, null, 2),
       }],
       isError: true,
@@ -354,7 +385,14 @@ export async function compareDocuments(args: {
   document2: string;
   shingleSize?: number;
 }) {
+  const startTime = Date.now();
   const { document1, document2, shingleSize = 5 } = args;
+  
+  logger.info('Document comparison started', { 
+    doc1Length: document1.length,
+    doc2Length: document2.length,
+    shingleSize
+  });
   
   try {
     // Preprocess both documents
@@ -379,6 +417,15 @@ export async function compareDocuments(args: {
     const confidence = determineConfidence(similarity, segments.length, avgSegmentLength);
     const matchType = classifyMatchType(similarity, segments, false);
     
+    const duration = Date.now() - startTime;
+    logger.info('Document comparison completed', { 
+      similarity: (similarity * 100).toFixed(2) + '%',
+      confidence,
+      matchType,
+      segments: segments.length,
+      duration
+    });
+    
     return {
       content: [{
         type: 'text',
@@ -402,12 +449,20 @@ export async function compareDocuments(args: {
     };
     
   } catch (error) {
+    const duration = Date.now() - startTime;
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    
+    logger.error('Document comparison failed', { 
+      error: errorMessage,
+      duration
+    });
+    
     return {
       content: [{
         type: 'text',
         text: JSON.stringify({
           success: false,
-          error: error instanceof Error ? error.message : 'Unknown error occurred',
+          error: errorMessage,
         }, null, 2),
       }],
       isError: true,

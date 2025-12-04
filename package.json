@@ -32,10 +32,11 @@
     "date-fns": "^3.6.0",
     "dotenv": "^16.3.1",
     "fast-xml-parser": "^4.3.2",
+    "node-cache": "^5.1.2",
     "sql.js": "^1.13.0",
     "uuid": "^9.0.1",
     "winston": "^3.11.0",
-    "zod": "^3.25.76"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20.10.6",
