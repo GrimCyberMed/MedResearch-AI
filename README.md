@@ -115,20 +115,32 @@ opencode --agent .opencode/agent/medresearch/master-agent.md
 
 ```
 MedResearch-AI/
-├── .opencode/
-│   ├── agent/medresearch/          # 9 main agents
-│   ├── agent/subagents/medresearch/ # 3 sub-agents
-│   ├── tool/                        # 6 MCP servers (TypeScript)
-│   ├── context/medresearch/         # Domain knowledge
-│   ├── command/medresearch/         # Slash commands
-│   └── university-profiles/         # University configs
+├── src/                             # Source code
+│   ├── common/                      # Shared utilities
+│   │   ├── logger.ts               # Winston logging
+│   │   ├── cache.ts                # NodeCache caching
+│   │   ├── retry.ts                # Retry logic
+│   │   └── validation.ts           # Zod schemas
+│   └── mcp/                         # MCP server
+│       ├── index.ts                # Server entry point
+│       └── tools/                  # MCP tools (11 files)
 │
-├── research-projects/               # Your research projects
-│   └── [project-slug]/
-│       ├── .memory/                 # SQLite database
-│       ├── .session/                # Session state
-│       └── 00-09/                   # Phase outputs
+├── tests/                           # Test files
+│   ├── test-databases.js
+│   ├── test-plagiarism.js
+│   ├── test-meta-analysis.js
+│   └── dashboard.js
 │
+├── docs/                            # Documentation
+│   ├── CHANGELOG.md                # Version history
+│   ├── DEVELOPMENT.md              # Developer guide
+│   ├── TESTING.md                  # Testing guide
+│   ├── GUIDES.md                   # User guides
+│   └── archive/                    # Old session files
+│
+├── assets/                          # Images, plots
+├── logs/                            # Runtime logs
+├── .memory/                         # Runtime memory
 ├── package.json
 ├── tsconfig.json
 └── README.md
@@ -187,5 +199,42 @@ MIT License - See LICENSE file for details
 
 ---
 
+---
+
+## 📚 Documentation
+
+### Quick Links
+
+- **[CHANGELOG.md](docs/CHANGELOG.md)** - Version history and release notes
+- **[DEVELOPMENT.md](docs/DEVELOPMENT.md)** - Developer guide and code standards
+- **[TESTING.md](docs/TESTING.md)** - Testing guide and test results
+- **[GUIDES.md](docs/GUIDES.md)** - User guides and tutorials
+
+### Getting Started
+
+1. **Installation** - See [Quick Start](#-quick-start) above
+2. **First Search** - See [GUIDES.md](docs/GUIDES.md#database-search-guide)
+3. **Running Tests** - See [TESTING.md](docs/TESTING.md#running-tests)
+4. **Development** - See [DEVELOPMENT.md](docs/DEVELOPMENT.md#development-workflow)
+
+### Key Documentation
+
+**For Users:**
+- Database search strategies
+- Plagiarism detection guide
+- Meta-analysis workflows
+- Citation management
+- Document generation
+
+**For Developers:**
+- Code standards and conventions
+- Adding new database tools
+- Writing tests
+- Debugging and troubleshooting
+- Performance optimization
+
+---
+
 **Created**: December 3, 2025  
+**Last Updated**: December 4, 2025  
 **Author**: MedResearch AI Team
