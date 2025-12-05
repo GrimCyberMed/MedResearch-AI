@@ -7,6 +7,71 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.2.0] - 2025-12-04
+
+### Added - Advanced Statistical Analysis Tools
+- **Intelligent Statistical Test Selection** (`selectStatisticalTest`)
+  - Comprehensive decision tree for 50+ statistical tests
+  - Automatic test selection based on outcome type, predictor type, groups, paired/independent
+  - Supports: continuous, binary, categorical, count, time-to-event outcomes
+  - Automatic assumption checking if data provided
+  - Power adequacy assessment
+  - Returns: recommended test, alternatives, assumptions, rationale, sample size recommendations
+
+- **Comprehensive Assumption Checking** (`checkAssumptions`)
+  - For t-test/ANOVA: normality (Shapiro-Wilk, Anderson-Darling), homogeneity (Levene's), outliers
+  - For regression: linearity, normality of residuals, homoscedasticity (Breusch-Pagan), independence (Durbin-Watson), influential points (Cook's distance)
+  - For chi-square: expected frequencies
+  - For correlation: linearity, bivariate outliers
+  - Generates diagnostic plots: Q-Q plots, histograms, boxplots, residual plots, Cook's distance plots
+
+- **Data Quality Validation** (`validateData`)
+  - Variable-specific validation (type, range, allowed values, required fields)
+  - Missing data analysis (per-variable, overall, MCAR patterns)
+  - Outlier detection (IQR method for all numeric variables)
+  - Duplicate detection
+  - Descriptive statistics (numeric & categorical)
+
+- **Statistical Power Analysis** (`calculatePower`)
+  - Supports: t-test, ANOVA, correlation, chi-square, regression
+  - Calculates: power (given n & effect size), sample size (given power & effect size), effect size (given n & power)
+  - Effect size interpretation (Cohen's d, correlation)
+  - Power curve generation
+  - Recommendations for adequacy
+
+- **End-to-End Analysis Workflow** (`runComprehensiveAnalysis`)
+  - 7-step process: validation → Table 1 → test selection → assumptions → analysis → effect sizes → interpretation
+  - Study design aware (cross-sectional, case-control, cohort, RCT)
+  - Generates baseline characteristics table (Table 1) exported to Word
+  - Reporting guideline recommendations (CONSORT, STROBE, PRISMA)
+  - Comprehensive Word report with all results
+
+### Enhanced
+- **r-statistics.ts**
+  - Expanded from 352 to 2,100+ lines
+  - Added 5 new comprehensive statistical functions
+  - Integrated with R packages: nortest, car, lmtest, pwr, gtsummary, flextable, officer
+  - Structured logging for all operations
+  - Duration tracking and error handling
+
+- **MCP Server** (`src/mcp/index.ts`)
+  - Added 5 new tool endpoints for statistical analysis
+  - Updated server description to reflect biostatistics capabilities
+  - Total of 7 R statistics tools now available
+
+### Documentation
+- **DATA-ANALYSIS-AGENT-RESEARCH.md** (10,000+ words)
+  - Statistical test selection frameworks
+  - Epidemiological study designs and analysis methods
+  - Biostatistical best practices (CONSORT, STROBE, PRISMA)
+  - Data preparation & validation techniques
+  - Software integration architecture
+  - Quality assurance frameworks
+  - Agent architecture design (7-phase workflow)
+  - Implementation roadmap
+
+---
+
 ## [4.1.0] - 2025-12-04
 
 ### Added - Production Hardening

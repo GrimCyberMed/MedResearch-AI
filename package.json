@@ -1,7 +1,7 @@
 {
   "name": "medresearch-ai",
-  "version": "4.1.0",
-  "description": "MedResearch AI - Multi-Agent System for Systematic Reviews with Memory & Anti-Hallucination",
+  "version": "4.2.0",
+  "description": "MedResearch AI - Multi-Agent System for Systematic Reviews with Advanced Biostatistics & Memory",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -21,6 +21,9 @@
     "medical-research",
     "systematic-review",
     "meta-analysis",
+    "biostatistics",
+    "statistical-analysis",
+    "power-analysis",
     "ai-agents",
     "opencode",
     "prisma-2020"

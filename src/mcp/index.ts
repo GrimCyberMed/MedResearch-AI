@@ -1,12 +1,13 @@
 /**
  * MedResearch AI - MCP Server
  * 
- * Model Context Protocol server providing tools for systematic reviews:
+ * Model Context Protocol server providing tools for systematic reviews and biostatistics:
  * - Medical database searching (PubMed, Europe PMC, Semantic Scholar, The Lens, ClinicalTrials.gov, CrossRef)
- * - R statistics integration (meta-analysis)
+ * - R statistics integration (meta-analysis, statistical test selection, assumption checking, power analysis, comprehensive analysis workflows)
  * - Citation management (Zotero)
  * - Document generation (DOCX, PDF)
  * - Open access finder (Unpaywall)
+ * - Plagiarism detection (cross-database checking)
  */
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -24,7 +25,15 @@ import { searchSemanticScholar, getSemanticScholarPaper } from './tools/semantic
 import { searchLens, getLensWork } from './tools/lens.js';
 import { searchClinicalTrials, getClinicalTrial } from './tools/clinicaltrials.js';
 import { searchCrossRef, getCrossRefWork } from './tools/crossref.js';
-import { runMetaAnalysis, generateForestPlot } from './tools/r-statistics.js';
+import { 
+  runMetaAnalysis, 
+  generateForestPlot,
+  selectStatisticalTest,
+  checkAssumptions,
+  validateData,
+  calculatePower,
+  runComprehensiveAnalysis
+} from './tools/r-statistics.js';
 import { manageCitations, exportBibliography } from './tools/citation-manager.js';
 import { generateDocument, exportToPDF } from './tools/document-generator.js';
 import { findOpenAccess } from './tools/unpaywall.js';
@@ -384,6 +393,233 @@ const TOOLS: Tool[] = [
       required: ['meta_analysis_result', 'output_path'],
     },
   },
+  {
+    name: 'select_statistical_test',
+    description: 'Intelligently select appropriate statistical test based on research question, data types, and study design. Includes automatic assumption checking and power assessment.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        research_question: {
+          type: 'string',
+          description: 'Research question or hypothesis to test',
+        },
+        outcome_type: {
+          type: 'string',
+          enum: ['continuous', 'binary', 'categorical', 'count', 'time-to-event'],
+          description: 'Type of outcome variable',
+        },
+        predictor_type: {
+          type: 'string',
+          enum: ['continuous', 'binary', 'categorical'],
+          description: 'Type of predictor/exposure variable',
+        },
+        num_groups: {
+          type: 'number',
+          description: 'Number of groups to compare (for group comparisons)',
+        },
+        paired: {
+          type: 'boolean',
+          description: 'Whether observations are paired/matched',
+          default: false,
+        },
+        sample_size: {
+          type: 'number',
+          description: 'Total sample size',
+        },
+        data_file: {
+          type: 'string',
+          description: 'Path to CSV data file for automatic assumption checking',
+        },
+        outcome_variable: {
+          type: 'string',
+          description: 'Name of outcome variable in data file',
+        },
+        group_variable: {
+          type: 'string',
+          description: 'Name of grouping variable in data file',
+        },
+      },
+      required: ['research_question', 'outcome_type'],
+    },
+  },
+  {
+    name: 'check_assumptions',
+    description: 'Comprehensive statistical assumption checking with diagnostic plots. Tests normality, homogeneity of variance, linearity, independence, and identifies outliers/influential points.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        data_file: {
+          type: 'string',
+          description: 'Path to CSV data file',
+        },
+        test_type: {
+          type: 'string',
+          enum: ['t-test', 'anova', 'regression', 'correlation', 'chi-square'],
+          description: 'Type of statistical test to check assumptions for',
+        },
+        outcome_variable: {
+          type: 'string',
+          description: 'Name of outcome variable',
+        },
+        predictor_variable: {
+          type: 'string',
+          description: 'Name of predictor variable (for regression/correlation)',
+        },
+        group_variable: {
+          type: 'string',
+          description: 'Name of grouping variable (for t-test/ANOVA)',
+        },
+        output_dir: {
+          type: 'string',
+          description: 'Directory to save diagnostic plots',
+        },
+      },
+      required: ['data_file', 'test_type', 'outcome_variable'],
+    },
+  },
+  {
+    name: 'validate_data',
+    description: 'Comprehensive data quality assessment including missing data analysis, outlier detection, duplicate checking, and descriptive statistics.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        data_file: {
+          type: 'string',
+          description: 'Path to CSV data file',
+        },
+        variable_specs: {
+          type: 'array',
+          description: 'Variable specifications for validation',
+          items: {
+            type: 'object',
+            properties: {
+              name: { type: 'string', description: 'Variable name' },
+              type: { type: 'string', enum: ['numeric', 'categorical', 'binary'], description: 'Variable type' },
+              required: { type: 'boolean', description: 'Whether variable is required' },
+              min: { type: 'number', description: 'Minimum allowed value (numeric only)' },
+              max: { type: 'number', description: 'Maximum allowed value (numeric only)' },
+              allowed_values: { type: 'array', items: { type: 'string' }, description: 'Allowed values (categorical only)' },
+            },
+            required: ['name', 'type'],
+          },
+        },
+        check_missing: {
+          type: 'boolean',
+          description: 'Perform missing data analysis',
+          default: true,
+        },
+        check_outliers: {
+          type: 'boolean',
+          description: 'Detect outliers using IQR method',
+          default: true,
+        },
+        check_duplicates: {
+          type: 'boolean',
+          description: 'Check for duplicate rows',
+          default: true,
+        },
+      },
+      required: ['data_file'],
+    },
+  },
+  {
+    name: 'calculate_power',
+    description: 'Statistical power analysis for sample size planning or post-hoc power assessment. Supports t-test, ANOVA, correlation, chi-square, and regression.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        test_type: {
+          type: 'string',
+          enum: ['t-test', 'anova', 'correlation', 'chi-square', 'regression'],
+          description: 'Type of statistical test',
+        },
+        effect_size: {
+          type: 'number',
+          description: 'Expected effect size (Cohen\'s d for t-test, f for ANOVA, r for correlation, w for chi-square, f2 for regression)',
+        },
+        sample_size: {
+          type: 'number',
+          description: 'Sample size per group',
+        },
+        power: {
+          type: 'number',
+          description: 'Desired statistical power (typically 0.80)',
+          default: 0.8,
+        },
+        alpha: {
+          type: 'number',
+          description: 'Significance level (typically 0.05)',
+          default: 0.05,
+        },
+        calculate: {
+          type: 'string',
+          enum: ['power', 'sample_size', 'effect_size'],
+          description: 'What to calculate (given the other parameters)',
+        },
+        num_groups: {
+          type: 'number',
+          description: 'Number of groups (for ANOVA)',
+        },
+        alternative: {
+          type: 'string',
+          enum: ['two.sided', 'greater', 'less'],
+          description: 'Alternative hypothesis',
+          default: 'two.sided',
+        },
+      },
+      required: ['test_type', 'calculate'],
+    },
+  },
+  {
+    name: 'run_comprehensive_analysis',
+    description: 'End-to-end statistical analysis workflow: data validation → baseline characteristics table → test selection → assumption checking → analysis → effect sizes → interpretation. Study design aware (RCT, cohort, case-control, cross-sectional).',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        data_file: {
+          type: 'string',
+          description: 'Path to CSV data file',
+        },
+        research_question: {
+          type: 'string',
+          description: 'Research question or hypothesis',
+        },
+        outcome_variable: {
+          type: 'string',
+          description: 'Name of primary outcome variable',
+        },
+        predictor_variables: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Names of predictor/exposure variables',
+        },
+        group_variable: {
+          type: 'string',
+          description: 'Name of grouping variable (for group comparisons)',
+        },
+        covariates: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Names of covariates for adjustment',
+        },
+        study_design: {
+          type: 'string',
+          enum: ['rct', 'cohort', 'case-control', 'cross-sectional'],
+          description: 'Study design type',
+        },
+        output_dir: {
+          type: 'string',
+          description: 'Directory to save outputs (tables, plots, reports)',
+        },
+        generate_report: {
+          type: 'boolean',
+          description: 'Generate comprehensive Word report',
+          default: true,
+        },
+      },
+      required: ['data_file', 'research_question', 'outcome_variable', 'study_design'],
+    },
+  },
 
   // Citation Management Tools
   {
@@ -711,6 +947,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return await runMetaAnalysis(args as any);
       case 'generate_forest_plot':
         return await generateForestPlot(args as any);
+      case 'select_statistical_test':
+        return await selectStatisticalTest(args as any);
+      case 'check_assumptions':
+        return await checkAssumptions(args as any);
+      case 'validate_data':
+        return await validateData(args as any);
+      case 'calculate_power':
+        return await calculatePower(args as any);
+      case 'run_comprehensive_analysis':
+        return await runComprehensiveAnalysis(args as any);
 
       // Citation Management Tools
       case 'manage_citations':

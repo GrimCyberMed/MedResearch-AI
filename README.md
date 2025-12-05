@@ -1,12 +1,23 @@
-# 🏥 MedResearch AI - Multi-Agent System v4.1
+# 🏥 MedResearch AI - Multi-Agent System v4.2
 
-**Intelligent multi-agent system for systematic reviews and meta-analyses with enterprise-grade memory and medical-grade anti-hallucination measures.**
+**Intelligent multi-agent system for systematic reviews and meta-analyses with PhD-level biostatistics, enterprise-grade memory, and medical-grade anti-hallucination measures.**
 
 ---
 
-## 🆕 What's New in v4.1
+## 🆕 What's New in v4.2
 
-### **Production Hardening** ⭐ NEW
+### **Advanced Statistical Analysis** ⭐ NEW
+- **Intelligent Test Selection**: Automatic recommendation based on data characteristics (50+ tests)
+- **Comprehensive Assumption Checking**: Normality, homogeneity, linearity, outliers with diagnostic plots
+- **Data Quality Validation**: Missing data analysis, outlier detection, duplicate checking
+- **Statistical Power Analysis**: Sample size planning and post-hoc power assessment
+- **End-to-End Workflows**: Complete analysis from validation to publication-ready reports
+- **Study Design Aware**: Tailored for RCTs, cohort, case-control, cross-sectional studies
+- **Reporting Guidelines**: CONSORT, STROBE, PRISMA compliance built-in
+
+### **What's New in v4.1**
+
+### **Production Hardening**
 - **Structured Logging**: Winston-based JSON logging with rotation
 - **Caching Layer**: 40-60% cache hit rate, 5-minute TTL
 - **Retry Logic**: Exponential backoff for transient failures
@@ -46,7 +57,7 @@
 4. **Protocol Agent** - PICO/SPIDER protocol
 5. **Research Agent** - Database search & screening coordination
 6. **Writer Agent** - Manuscript writing
-7. **Statistician Agent** - Meta-analysis
+7. **Statistician Agent** - PhD-level biostatistics + meta-analysis
 8. **Bibliography Agent** - Citation management
 9. **Critique Agent** - Quality assurance + anti-hallucination
 
@@ -55,16 +66,25 @@
 11. **Screening Sub-Agent** - Title/abstract and full-text screening
 12. **Extraction Sub-Agent** - Data extraction and risk of bias assessment
 
-### **9 MCP Tools**
-1. **search_pubmed** - Search PubMed/MEDLINE database
-2. **search_europe_pmc** - Search Europe PMC with preprints
-3. **run_meta_analysis** - Execute meta-analysis using R
-4. **generate_forest_plot** - Create forest plot visualizations
-5. **manage_citations** - Verify and retrieve citation metadata
-6. **export_bibliography** - Export formatted bibliographies
-7. **generate_document** - Generate DOCX manuscripts
-8. **export_to_pdf** - Convert DOCX to PDF
-9. **find_open_access** - Find OA versions via Unpaywall
+### **14 MCP Tools**
+
+**Statistical Analysis (7)**:
+1. **select_statistical_test** - Intelligent test selection with decision tree
+2. **check_assumptions** - Comprehensive assumption testing with diagnostic plots
+3. **validate_data** - Data quality assessment and validation
+4. **calculate_power** - Power analysis for sample size planning
+5. **run_comprehensive_analysis** - End-to-end analysis workflow
+6. **run_meta_analysis** - Execute meta-analysis using R
+7. **generate_forest_plot** - Create forest plot visualizations
+
+**Database & Citation (7)**:
+8. **search_pubmed** - Search PubMed/MEDLINE database
+9. **search_europe_pmc** - Search Europe PMC with preprints
+10. **manage_citations** - Verify and retrieve citation metadata
+11. **export_bibliography** - Export formatted bibliographies
+12. **generate_document** - Generate DOCX manuscripts
+13. **export_to_pdf** - Convert DOCX to PDF
+14. **find_open_access** - Find OA versions via Unpaywall
 
 ### **Memory System**
 - **Short-term** (current session)
@@ -150,6 +170,7 @@ MedResearch-AI/
 
 ## 🔑 Key Features
 
+### **Core Capabilities**
 - ✅ **OpenCode-native** - Uses Claude Pro (no API costs)
 - ✅ **Free databases** - PubMed, Europe PMC, Lens, OpenAlex
 - ✅ **Memory persistence** - SQLite, never lose context
@@ -160,13 +181,42 @@ MedResearch-AI/
 - ✅ **Quality gates** - Validation at each phase
 - ✅ **Audit trail** - Every decision logged
 
+### **Statistical Analysis** ⭐ NEW
+- ✅ **Intelligent Test Selection** - Automatic recommendation (50+ tests)
+- ✅ **Assumption Checking** - Normality, homogeneity, linearity, outliers
+- ✅ **Data Validation** - Missing data, outliers, duplicates
+- ✅ **Power Analysis** - Sample size planning, post-hoc power
+- ✅ **Complete Workflows** - Validation → Table 1 → Analysis → Report
+- ✅ **Study Design Aware** - RCT, cohort, case-control, cross-sectional
+- ✅ **Reporting Standards** - CONSORT, STROBE, PRISMA
+- ✅ **Publication Ready** - Table 1, diagnostic plots, Word reports
+
 ---
 
 ## 📚 Documentation
 
+### **Core Documentation**
 - **Master Plan**: `MEDRESEARCH-AI-MASTER-PLAN-V4.md` (200+ pages)
 - **Session Prompt**: `ENHANCED-SESSION-PROMPT-V4.md`
 - **Session Summary**: `SESSION-SUMMARY-DEC-3-2025.md`
+- **Changelog**: `docs/CHANGELOG.md`
+
+### **Statistical Analysis Guides** ⭐ NEW
+- **Statistical Methods**: `docs/STATISTICAL-METHODS-GUIDE.md` (10,000+ words)
+  - Complete guide to all 5 statistical functions
+  - 20+ practical examples with expected outputs
+  - Decision trees and troubleshooting
+- **Assumption Checking**: `docs/ASSUMPTION-CHECKING-GUIDE.md` (5,000+ words)
+  - Interpreting normality tests, Q-Q plots, diagnostic plots
+  - Handling violations with decision trees
+- **Power Analysis**: `docs/POWER-ANALYSIS-GUIDE.md` (6,000+ words)
+  - Sample size planning and effect size estimation
+  - A priori, post-hoc, and sensitivity analyses
+- **Reporting Guidelines**: `docs/REPORTING-GUIDELINES.md` (5,000+ words)
+  - CONSORT, STROBE, PRISMA checklists
+  - Statistical reporting standards
+- **Research Document**: `docs/DATA-ANALYSIS-AGENT-RESEARCH.md` (10,000+ words)
+  - Comprehensive biostatistics research and frameworks
 
 ---
 
