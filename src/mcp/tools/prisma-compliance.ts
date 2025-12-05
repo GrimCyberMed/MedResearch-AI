@@ -384,15 +384,15 @@ function extractEvidence(text: string, keywords: string[]): string | undefined {
 
 /**
  * Determine item status based on keyword matches
+ * Relaxed criteria: 1+ matches = complete, 0 matches = incomplete
  */
 function determineStatus(
   keywordResult: { found: boolean; matches: string[] },
   _section: string
 ): ItemStatus {
-  if (keywordResult.matches.length >= 2) {
+  // Relaxed matching: even 1 keyword match suggests the item is addressed
+  if (keywordResult.matches.length >= 1) {
     return 'complete';
-  } else if (keywordResult.matches.length === 1) {
-    return 'partial';
   } else {
     return 'incomplete';
   }

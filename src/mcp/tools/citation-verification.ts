@@ -140,6 +140,26 @@ async function verifyPMID(pmid: string): Promise<VerificationResult> {
       };
     }
 
+    // Check if PMID actually exists (PubMed returns error field in result)
+    if (result.error) {
+      return {
+        id: pmid,
+        type: 'pmid',
+        status: 'not_found',
+        error_message: `PMID not found in PubMed: ${result.error}`,
+      };
+    }
+
+    // Additional validation: check if essential fields exist
+    if (!result.title || result.title === 'Unknown' || !result.pubdate) {
+      return {
+        id: pmid,
+        type: 'pmid',
+        status: 'not_found',
+        error_message: 'PMID not found in PubMed (missing essential metadata)',
+      };
+    }
+
     const metadata: CitationMetadata = {
       title: result.title || 'Unknown',
       authors: result.authors?.map((a: any) => a.name) || [],
@@ -252,33 +272,55 @@ async function checkRetraction(citation: VerificationResult): Promise<Verificati
     }
 
     // Check PubMed for retraction notices
+    // Note: This is a simplified check. For production, use RetractionWatch API
     if (citation.type === 'pmid') {
       const pmid = citation.id;
-      const url = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pubmed&id=${pmid}&linkname=pubmed_pubmed_citedin&retmode=json`;
       
-      const response = await withRetry(async () => {
-        const res = await fetch(url);
-        if (!res.ok) {
-          throw new Error(`PubMed API error: ${res.status}`);
-        }
-        return res.json();
-      });
-
-      // Check for retraction notices in citing articles
-      const data = response as any;
-      const linksets = data.linksets?.[0]?.linksetdbs || [];
-      const hasRetraction = linksets.some((ls: any) => 
-        ls.linkname === 'pubmed_pubmed_citedin' && ls.links?.length > 0
-      );
-
-      if (hasRetraction) {
-        logger.warn(`PMID ${pmid} may have retraction notices`);
+      // Check for "Retracted" or "Retraction" in the title
+      const title = citation.metadata?.title?.toLowerCase() || '';
+      if (title.includes('retracted') || title.includes('retraction of')) {
+        logger.warn(`PMID ${pmid} appears to be retracted based on title`);
         citation.status = 'retracted';
         citation.retraction_info = {
           retraction_date: 'Unknown',
-          retraction_reason: 'Potential retraction detected - manual verification required',
-          retraction_notice: `Check PubMed for retraction notices citing PMID:${pmid}`,
+          retraction_reason: 'Retraction detected in article title',
+          retraction_notice: `Article title contains retraction keywords. Verify manually at PubMed.`,
         };
+        return citation;
+      }
+
+      // For more thorough checking, query PubMed for retraction links
+      // Only flag if there are specific retraction-related links (not just citations)
+      try {
+        const url = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pubmed&id=${pmid}&linkname=pubmed_pubmed_retracted&retmode=json`;
+        
+        const response = await withRetry(async () => {
+          const res = await fetch(url);
+          if (!res.ok) {
+            throw new Error(`PubMed API error: ${res.status}`);
+          }
+          return res.json();
+        });
+
+        // Check for specific retraction links
+        const data = response as any;
+        const linksets = data.linksets?.[0]?.linksetdbs || [];
+        const hasRetraction = linksets.some((ls: any) => 
+          ls.linkname === 'pubmed_pubmed_retracted' && ls.links?.length > 0
+        );
+
+        if (hasRetraction) {
+          logger.warn(`PMID ${pmid} has retraction notices`);
+          citation.status = 'retracted';
+          citation.retraction_info = {
+            retraction_date: 'Unknown',
+            retraction_reason: 'Retraction notice found in PubMed',
+            retraction_notice: `Check PubMed for retraction details: PMID ${pmid}`,
+          };
+        }
+      } catch (error) {
+        // If retraction check fails, don't mark as retracted
+        logger.debug(`Could not check retraction status for PMID ${pmid}: ${error}`);
       }
     }
 

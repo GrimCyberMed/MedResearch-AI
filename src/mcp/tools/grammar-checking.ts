@@ -197,6 +197,7 @@ const ACADEMIC_STYLE_RULES = [
  * Common spelling errors in medical writing
  */
 const COMMON_MEDICAL_SPELLING_ERRORS: Record<string, string> = {
+  // General spelling errors
   'occured': 'occurred',
   'recieve': 'receive',
   'seperate': 'separate',
@@ -217,6 +218,32 @@ const COMMON_MEDICAL_SPELLING_ERRORS: Record<string, string> = {
   'seperation': 'separation',
   'succesful': 'successful',
   'untill': 'until',
+  
+  // Medical-specific spelling errors
+  'anaemia': 'anemia', // US spelling
+  'oestrogen': 'estrogen', // US spelling
+  'haemoglobin': 'hemoglobin', // US spelling
+  'paediatric': 'pediatric', // US spelling
+  'analysed': 'analyzed', // US spelling
+  'randomised': 'randomized', // US spelling
+  'summarised': 'summarized', // US spelling
+  'organised': 'organized', // US spelling
+  'recognised': 'recognized', // US spelling
+  'characterised': 'characterized', // US spelling
+  
+  // Common medical term errors
+  'diabetis': 'diabetes',
+  'asthama': 'asthma',
+  'hypertention': 'hypertension',
+  'inflamation': 'inflammation',
+  'hemmorhage': 'hemorrhage',
+  'innoculation': 'inoculation',
+  'vacination': 'vaccination',
+  'antibotic': 'antibiotic',
+  'symtom': 'symptom',
+  'syndrom': 'syndrome',
+  'diarrhoea': 'diarrhea', // US spelling
+  'oedema': 'edema', // US spelling
 };
 
 /**

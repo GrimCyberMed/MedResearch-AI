@@ -47,7 +47,7 @@ export interface ScreeningResult {
 export interface ScreenCitationsMLInput {
   citations: Citation[];
   inclusion_criteria: string;
-  threshold?: number; // Default 0.7
+  threshold?: number; // Default 0.3 (TF-IDF similarity scores are typically low)
   output_file?: string;
 }
 
@@ -282,7 +282,9 @@ export async function screenCitationsML(
   try {
     logger.info(`Starting ML-based screening for ${input.citations.length} citations`);
     
-    const threshold = input.threshold || 0.7;
+    // Default threshold of 0.3 is appropriate for TF-IDF cosine similarity
+    // which typically produces scores in the 0-0.5 range
+    const threshold = input.threshold || 0.3;
     
     // Preprocess inclusion criteria
     const criteriaText = input.inclusion_criteria.toLowerCase();
@@ -376,10 +378,15 @@ export async function screenCitationsML(
     
     if (likelyRelevant > 0) {
       recommendations.push(`Review ${likelyRelevant} likely relevant citations first (highest priority)`);
+      recommendations.push(`Start with citations scoring above ${(threshold * 100).toFixed(0)}% relevance`);
+    } else {
+      recommendations.push(`No citations met the relevance threshold of ${(threshold * 100).toFixed(0)}%`);
+      recommendations.push(`Consider lowering the threshold or revising inclusion criteria`);
     }
     
     if (uncertain > 0) {
       recommendations.push(`Review ${uncertain} uncertain citations (medium priority)`);
+      recommendations.push(`These citations scored between ${(threshold * 0.7 * 100).toFixed(0)}% and ${(threshold * 100).toFixed(0)}% relevance`);
     }
     
     if (likelyIrrelevant > 0) {
@@ -387,7 +394,11 @@ export async function screenCitationsML(
     }
     
     recommendations.push(`Estimated time saved: ${timeSavedHours.toFixed(1)} hours`);
-    recommendations.push(`Focus on top ${Math.min(50, likelyRelevant + uncertain)} citations for initial screening`);
+    
+    const topCitations = Math.min(50, likelyRelevant + uncertain);
+    if (topCitations > 0) {
+      recommendations.push(`Focus on top ${topCitations} citations for initial screening`);
+    }
     
     // Save results to file if requested
     let outputFile: string | undefined;
