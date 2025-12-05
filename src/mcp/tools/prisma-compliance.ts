@@ -12,7 +12,6 @@
  */
 
 import { logger } from '../../common/logger.js';
-import * as fs from 'fs/promises';
 
 /**
  * Checklist item status
@@ -388,7 +387,7 @@ function extractEvidence(text: string, keywords: string[]): string | undefined {
  */
 function determineStatus(
   keywordResult: { found: boolean; matches: string[] },
-  section: string
+  _section: string
 ): ItemStatus {
   if (keywordResult.matches.length >= 2) {
     return 'complete';

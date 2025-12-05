@@ -11,7 +11,7 @@
 
 import { logger } from '../../common/logger.js';
 import { withRetry } from '../../common/retry.js';
-import { withCache } from '../../common/cache.js';
+import { defaultCache } from '../../common/cache.js';
 
 /**
  * Citation input type
@@ -119,7 +119,8 @@ async function verifyPMID(pmid: string): Promise<VerificationResult> {
     });
 
     // Check if PMID exists
-    if (response.error) {
+    const data = response as any;
+    if (data.error) {
       return {
         id: pmid,
         type: 'pmid',
@@ -129,7 +130,7 @@ async function verifyPMID(pmid: string): Promise<VerificationResult> {
     }
 
     // Extract metadata
-    const result = response.result?.[pmid];
+    const result = data.result?.[pmid];
     if (!result) {
       return {
         id: pmid,
@@ -199,7 +200,8 @@ async function verifyDOI(doi: string): Promise<VerificationResult> {
     });
 
     // Check if DOI exists
-    if (!response || !response.message) {
+    const data = response as any;
+    if (!data || !data.message) {
       return {
         id: doi,
         type: 'doi',
@@ -209,7 +211,7 @@ async function verifyDOI(doi: string): Promise<VerificationResult> {
     }
 
     // Extract metadata
-    const work = response.message;
+    const work = data.message;
     const metadata: CitationMetadata = {
       title: work.title?.[0] || 'Unknown',
       authors: work.author?.map((a: any) => `${a.given || ''} ${a.family || ''}`.trim()) || [],
@@ -263,7 +265,8 @@ async function checkRetraction(citation: VerificationResult): Promise<Verificati
       });
 
       // Check for retraction notices in citing articles
-      const linksets = response.linksets?.[0]?.linksetdbs || [];
+      const data = response as any;
+      const linksets = data.linksets?.[0]?.linksetdbs || [];
       const hasRetraction = linksets.some((ls: any) => 
         ls.linkname === 'pubmed_pubmed_citedin' && ls.links?.length > 0
       );
@@ -309,7 +312,8 @@ async function checkCorrection(citation: VerificationResult): Promise<Verificati
       });
 
       // Check for correction notices
-      const linksets = response.linksets?.[0]?.linksetdbs || [];
+      const data = response as any;
+      const linksets = data.linksets?.[0]?.linksetdbs || [];
       const hasCorrection = linksets.some((ls: any) => 
         ls.linkname === 'pubmed_pubmed_corrected' && ls.links?.length > 0
       );
@@ -450,13 +454,13 @@ export async function verifyCitationsBatch(
       // Verify based on type
       let result: VerificationResult;
       if (citation.type === 'pmid') {
-        result = await withCache(
+        result = await defaultCache.getOrSet(
           `verify_pmid_${citation.id}`,
           () => verifyPMID(citation.id),
           3600 // Cache for 1 hour
         );
       } else if (citation.type === 'doi') {
-        result = await withCache(
+        result = await defaultCache.getOrSet(
           `verify_doi_${citation.id}`,
           () => verifyDOI(citation.id),
           3600 // Cache for 1 hour

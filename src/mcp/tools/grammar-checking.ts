@@ -141,7 +141,7 @@ const ACADEMIC_STYLE_RULES = [
     type: 'clarity' as ErrorType,
     severity: 'suggestion' as ErrorSeverity,
     explanation: 'Be more specific instead of using vague terms',
-    getCorrection: (match: string) => '[be more specific]',
+    getCorrection: (_match: string) => '[be more specific]',
   },
   {
     id: 'check_double_spaces',
@@ -526,7 +526,7 @@ export function generateGrammarReport(output: CheckGrammarOutput): string {
   // Report suggestions (limit to 5)
   if (errorsBySeverity.suggestion.length > 0) {
     report += `## 💡 Suggestions (${errorsBySeverity.suggestion.length})\n\n`;
-    errorsBySeverity.suggestion.slice(0, 5).forEach((error, i) => {
+    errorsBySeverity.suggestion.slice(0, 5).forEach((error) => {
       report += `- **Line ${error.position.line}**: ${error.explanation}\n`;
     });
     if (errorsBySeverity.suggestion.length > 5) {

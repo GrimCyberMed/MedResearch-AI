@@ -89,15 +89,6 @@ function generateDashboardHTML(input: CreateDashboardInput): string {
     ? phaseValues.reduce((a, b) => a + b, 0) / phaseValues.length
     : 0;
   
-  // Timeline status color
-  const timelineColors = {
-    on_track: '#28a745',
-    ahead: '#17a2b8',
-    delayed: '#dc3545',
-    unknown: '#6c757d',
-  };
-  const timelineColor = timelineColors[metrics.timeline_status];
-  
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -549,12 +540,12 @@ export async function updateDashboard(
     
     // Extract project info from path
     const projectPath = path.dirname(dashboardPath);
-    const projectName = path.basename(projectPath);
+    const projectNameFromPath = path.basename(projectPath);
     
     // Recreate dashboard with new metrics
     return await createProjectDashboard({
       project_path: projectPath,
-      project_name,
+      project_name: projectNameFromPath,
       metrics,
       output_path: dashboardPath,
       auto_refresh: true,

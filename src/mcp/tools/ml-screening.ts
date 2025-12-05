@@ -14,7 +14,6 @@
 
 import { logger } from '../../common/logger.js';
 import * as fs from 'fs/promises';
-import * as path from 'path';
 
 /**
  * Citation for screening
@@ -369,7 +368,6 @@ export async function screenCitationsML(
     
     // Estimate time saved (assume 2 minutes per citation for manual screening)
     // ML screening allows focusing on likely relevant + uncertain citations
-    const citationsToReview = likelyRelevant + uncertain;
     const citationsSkipped = likelyIrrelevant;
     const timeSavedHours = (citationsSkipped * 2) / 60;
     
