@@ -39,6 +39,11 @@ import { generateDocument, exportToPDF } from './tools/document-generator.js';
 import { findOpenAccess } from './tools/unpaywall.js';
 import { checkPlagiarism, compareDocuments } from './tools/plagiarism-detection.js';
 import { checkPlagiarismAcrossDatabases } from './tools/plagiarism-database-integration.js';
+import { verifyCitationsBatch } from './tools/citation-verification.js';
+import { screenCitationsML } from './tools/ml-screening.js';
+import { checkGrammarAdvanced } from './tools/grammar-checking.js';
+import { checkPRISMACompliance } from './tools/prisma-compliance.js';
+import { createProjectDashboard } from './tools/project-dashboard.js';
 
 /**
  * Tool definitions for MCP
@@ -886,6 +891,185 @@ const TOOLS: Tool[] = [
       required: ['text'],
     },
   },
+
+  // Phase 1 Tools (v5.0.0)
+  {
+    name: 'verify_citations_batch',
+    description: 'Batch verification of citations (DOIs/PMIDs) against PubMed, CrossRef, and RetractionWatch with comprehensive verification reports',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        citations: {
+          type: 'array',
+          description: 'Array of citations to verify',
+          items: {
+            type: 'object',
+            properties: {
+              type: { type: 'string', enum: ['doi', 'pmid', 'pmcid'], description: 'Citation type' },
+              id: { type: 'string', description: 'Citation identifier' },
+            },
+            required: ['type', 'id'],
+          },
+        },
+        check_retractions: {
+          type: 'boolean',
+          description: 'Check for retraction notices',
+          default: true,
+        },
+        check_corrections: {
+          type: 'boolean',
+          description: 'Check for correction notices',
+          default: true,
+        },
+      },
+      required: ['citations'],
+    },
+  },
+  {
+    name: 'screen_citations_ml',
+    description: 'ML-based citation screening using TF-IDF relevance scoring for automated prioritization and time savings',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        citations: {
+          type: 'array',
+          description: 'Array of citations to screen',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              title: { type: 'string' },
+              abstract: { type: 'string' },
+              authors: { type: 'array', items: { type: 'string' } },
+              journal: { type: 'string' },
+              year: { type: 'number' },
+              keywords: { type: 'array', items: { type: 'string' } },
+            },
+            required: ['id', 'title'],
+          },
+        },
+        inclusion_criteria: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Inclusion criteria keywords/phrases',
+        },
+        exclusion_criteria: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Exclusion criteria keywords/phrases',
+        },
+        relevance_threshold: {
+          type: 'number',
+          description: 'Relevance score threshold (0-1)',
+          default: 0.3,
+        },
+      },
+      required: ['citations', 'inclusion_criteria'],
+    },
+  },
+  {
+    name: 'check_grammar',
+    description: 'Academic medical writing style enforcement with grammar, spelling, and clarity checking',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        text: {
+          type: 'string',
+          description: 'Text to check for grammar and style issues',
+        },
+        style: {
+          type: 'string',
+          enum: ['academic', 'medical', 'scientific'],
+          description: 'Writing style to enforce',
+          default: 'medical',
+        },
+        severity_filter: {
+          type: 'string',
+          enum: ['error', 'warning', 'suggestion', 'all'],
+          description: 'Minimum severity level to report',
+          default: 'warning',
+        },
+      },
+      required: ['text'],
+    },
+  },
+  {
+    name: 'check_prisma_compliance',
+    description: 'PRISMA 2020 automated compliance checking with 27-item checklist validation and scoring',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        manuscript_text: {
+          type: 'string',
+          description: 'Full manuscript text to check for PRISMA compliance',
+        },
+        guideline: {
+          type: 'string',
+          enum: ['PRISMA_2020', 'PRISMA_P', 'CONSORT', 'STROBE'],
+          description: 'Reporting guideline to check against',
+          default: 'PRISMA_2020',
+        },
+        sections: {
+          type: 'object',
+          description: 'Manuscript sections (title, abstract, introduction, methods, results, discussion)',
+          properties: {
+            title: { type: 'string' },
+            abstract: { type: 'string' },
+            introduction: { type: 'string' },
+            methods: { type: 'string' },
+            results: { type: 'string' },
+            discussion: { type: 'string' },
+          },
+        },
+      },
+      required: ['manuscript_text'],
+    },
+  },
+  {
+    name: 'create_project_dashboard',
+    description: 'Create real-time HTML dashboard with Chart.js for project progress visualization and metrics tracking',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        project_path: {
+          type: 'string',
+          description: 'Path to project directory',
+        },
+        project_name: {
+          type: 'string',
+          description: 'Project name',
+        },
+        metrics: {
+          type: 'object',
+          description: 'Project metrics',
+          properties: {
+            phase_progress: {
+              type: 'object',
+              description: 'Progress by phase (0-100%)',
+            },
+            citations_screened: { type: 'number' },
+            citations_included: { type: 'number' },
+            data_extracted: { type: 'number' },
+            quality_score: { type: 'number', description: 'Overall quality score (0-100)' },
+            timeline_status: {
+              type: 'string',
+              enum: ['on_track', 'ahead', 'delayed', 'unknown'],
+            },
+          },
+        },
+        output_path: {
+          type: 'string',
+          description: 'Output path for dashboard HTML file',
+        },
+        auto_refresh: {
+          type: 'boolean',
+          description: 'Enable auto-refresh every 30 seconds',
+          default: false,
+        },
+      },
+      required: ['project_path', 'project_name', 'metrics', 'output_path'],
+    },
+  },
 ];
 
 /**
@@ -981,6 +1165,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return await compareDocuments(args as any);
       case 'check_plagiarism_databases':
         return await checkPlagiarismAcrossDatabases(args as any);
+
+      // Phase 1 Tools (v5.0.0)
+      case 'verify_citations_batch':
+        return await verifyCitationsBatch(args as any);
+      case 'screen_citations_ml':
+        return await screenCitationsML(args as any);
+      case 'check_grammar':
+        return await checkGrammarAdvanced(args as any);
+      case 'check_prisma_compliance':
+        return await checkPRISMACompliance(args as any);
+      case 'create_project_dashboard':
+        return await createProjectDashboard(args as any);
 
       default:
         throw new Error(`Unknown tool: ${name}`);
