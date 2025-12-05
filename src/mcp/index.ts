@@ -44,6 +44,17 @@ import { screenCitationsML } from './tools/ml-screening.js';
 import { checkGrammarAdvanced } from './tools/grammar-checking.js';
 import { checkPRISMACompliance } from './tools/prisma-compliance.js';
 import { createProjectDashboard } from './tools/project-dashboard.js';
+// Phase 2 Tools (v5.1.0)
+import { extractDataNLP } from './tools/nlp-data-extraction.js';
+import { detectDuplicates } from './tools/duplicate-detection.js';
+import { assessStudyQuality } from './tools/study-quality-assessment.js';
+import { formatCitations } from './tools/citation-formatting.js';
+import { generateReferences } from './tools/reference-list-generation.js';
+import { generateManuscriptTemplate } from './tools/manuscript-templates.js';
+import { scoreResearchQuestion } from './tools/research-question-scoring.js';
+import { extractPICO } from './tools/pico-extraction.js';
+import { identifyGaps } from './tools/literature-gap-identification.js';
+import { predictTimeline } from './tools/ml-timeline-prediction.js';
 
 /**
  * Tool definitions for MCP
@@ -1070,6 +1081,308 @@ const TOOLS: Tool[] = [
       required: ['project_path', 'project_name', 'metrics', 'output_path'],
     },
   },
+
+  // Phase 2 Tools (v5.1.0) - Research Agent
+  {
+    name: 'extract_data_nlp',
+    description: 'Extract study characteristics (PICO, sample size, outcomes) from full-text articles using NLP',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        text: { type: 'string', description: 'Full-text article or abstract to extract data from' },
+        extract_pico: { type: 'boolean', description: 'Extract PICO elements (default: true)', default: true },
+        extract_characteristics: { type: 'boolean', description: 'Extract study characteristics (default: true)', default: true },
+        extract_outcomes: { type: 'boolean', description: 'Extract outcome data (default: true)', default: true },
+        extract_tables: { type: 'boolean', description: 'Count tables and figures (default: true)', default: true },
+        min_confidence: { type: 'number', description: 'Minimum confidence threshold (0-1, default: 0.3)', default: 0.3 },
+      },
+      required: ['text'],
+    },
+  },
+  {
+    name: 'detect_duplicates',
+    description: 'Detect duplicate citations across databases using fuzzy matching and identifier cross-referencing',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        citations: {
+          type: 'array',
+          description: 'Array of citations to check for duplicates',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              title: { type: 'string' },
+              authors: { type: 'array', items: { type: 'string' } },
+              year: { type: 'number' },
+              journal: { type: 'string' },
+              doi: { type: 'string' },
+              pmid: { type: 'string' },
+              pmcid: { type: 'string' },
+              database: { type: 'string' },
+            },
+            required: ['id', 'title', 'authors', 'year', 'database'],
+          },
+        },
+        min_confidence: { type: 'number', description: 'Minimum confidence threshold (0-1, default: 0.5)', default: 0.5 },
+        check_identifiers: { type: 'boolean', description: 'Check DOI/PMID/PMCID (default: true)', default: true },
+        check_title: { type: 'boolean', description: 'Check title similarity (default: true)', default: true },
+        check_authors: { type: 'boolean', description: 'Check author overlap (default: true)', default: true },
+        check_year: { type: 'boolean', description: 'Check publication year (default: true)', default: true },
+      },
+      required: ['citations'],
+    },
+  },
+  {
+    name: 'assess_study_quality',
+    description: 'Automated risk of bias assessment using Cochrane RoB 2.0 and GRADE quality assessment',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        study_text: { type: 'string', description: 'Full text or abstract of the study to assess' },
+        study_type: {
+          type: 'string',
+          enum: ['rct', 'cohort', 'case_control', 'cross_sectional', 'systematic_review'],
+          description: 'Type of study design',
+        },
+        assess_rob2: { type: 'boolean', description: 'Perform Cochrane RoB 2.0 assessment (default: true)', default: true },
+        assess_grade: { type: 'boolean', description: 'Perform GRADE quality assessment (default: true)', default: true },
+        detect_bias: { type: 'boolean', description: 'Detect bias indicators (default: true)', default: true },
+      },
+      required: ['study_text', 'study_type'],
+    },
+  },
+
+  // Phase 2 Tools (v5.1.0) - Writer Agent
+  {
+    name: 'format_citations',
+    description: 'Format citations in various styles (APA, Vancouver, Harvard, AMA, etc.) with in-text citation generation',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        citations: {
+          type: 'array',
+          description: 'Array of citations to format',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              metadata: {
+                type: 'object',
+                properties: {
+                  authors: { type: 'array', items: { type: 'string' } },
+                  title: { type: 'string' },
+                  journal: { type: 'string' },
+                  year: { type: 'number' },
+                  volume: { type: 'string' },
+                  issue: { type: 'string' },
+                  pages: { type: 'string' },
+                  doi: { type: 'string' },
+                  pmid: { type: 'string' },
+                  url: { type: 'string' },
+                },
+                required: ['authors', 'title', 'journal', 'year'],
+              },
+            },
+            required: ['id', 'metadata'],
+          },
+        },
+        style: {
+          type: 'string',
+          enum: ['apa', 'vancouver', 'harvard', 'ama', 'chicago', 'mla', 'nature', 'science', 'nejm', 'jama'],
+          description: 'Citation style to use',
+        },
+        include_doi: { type: 'boolean', description: 'Include DOI (default: true)', default: true },
+        include_url: { type: 'boolean', description: 'Include URL (default: true)', default: true },
+      },
+      required: ['citations', 'style'],
+    },
+  },
+  {
+    name: 'generate_references',
+    description: 'Auto-generate formatted reference lists with sorting, duplicate removal, and style-specific formatting',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        citations: {
+          type: 'array',
+          description: 'Array of citations to include in reference list',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              metadata: {
+                type: 'object',
+                properties: {
+                  authors: { type: 'array', items: { type: 'string' } },
+                  title: { type: 'string' },
+                  journal: { type: 'string' },
+                  year: { type: 'number' },
+                  volume: { type: 'string' },
+                  issue: { type: 'string' },
+                  pages: { type: 'string' },
+                  doi: { type: 'string' },
+                  pmid: { type: 'string' },
+                },
+                required: ['authors', 'title', 'journal', 'year'],
+              },
+            },
+            required: ['id', 'metadata'],
+          },
+        },
+        style: {
+          type: 'string',
+          enum: ['apa', 'vancouver', 'harvard', 'ama', 'chicago', 'mla', 'nature', 'science', 'nejm', 'jama'],
+          description: 'Citation style to use',
+        },
+        sort_order: {
+          type: 'string',
+          enum: ['alphabetical', 'citation_order', 'chronological'],
+          description: 'Sort order for references (default: alphabetical)',
+          default: 'alphabetical',
+        },
+        remove_duplicates: { type: 'boolean', description: 'Remove duplicate citations (default: true)', default: true },
+        include_doi: { type: 'boolean', description: 'Include DOI in references (default: true)', default: true },
+        numbering: {
+          type: 'string',
+          enum: ['none', 'numeric', 'bracketed'],
+          description: 'Numbering style for references (default: none)',
+          default: 'none',
+        },
+      },
+      required: ['citations', 'style'],
+    },
+  },
+  {
+    name: 'generate_manuscript_template',
+    description: 'Generate journal-specific manuscript templates with PRISMA, CONSORT, or STROBE compliance',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        template_type: {
+          type: 'string',
+          enum: ['prisma', 'consort', 'strobe', 'moose', 'arrive', 'care'],
+          description: 'Type of reporting guideline template',
+        },
+        journal: {
+          type: 'string',
+          enum: ['jama', 'nejm', 'bmj', 'lancet', 'plos', 'nature', 'science', 'cochrane', 'generic'],
+          description: 'Target journal',
+        },
+        title: { type: 'string', description: 'Manuscript title (optional)' },
+        include_checklist: { type: 'boolean', description: 'Include checklist items (default: true)', default: true },
+        include_word_counts: { type: 'boolean', description: 'Include word count limits (default: true)', default: true },
+      },
+      required: ['template_type', 'journal'],
+    },
+  },
+
+  // Phase 2 Tools (v5.1.0) - Question Agent
+  {
+    name: 'score_research_question',
+    description: 'Evaluate research questions using FINER criteria and PICO/SPIDER completeness scoring',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        question: { type: 'string', description: 'Research question to evaluate' },
+        context: { type: 'string', description: 'Additional context about the research (optional)' },
+        framework: {
+          type: 'string',
+          enum: ['pico', 'spider', 'finer'],
+          description: 'Evaluation framework (default: pico)',
+          default: 'pico',
+        },
+      },
+      required: ['question'],
+    },
+  },
+  {
+    name: 'extract_pico',
+    description: 'Extract PICO elements (Population, Intervention, Comparator, Outcome) from research questions and abstracts',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        text: { type: 'string', description: 'Research question or abstract to extract PICO from' },
+        generate_search_terms: { type: 'boolean', description: 'Generate search terms from PICO elements (default: true)', default: true },
+        validate_completeness: { type: 'boolean', description: 'Validate PICO completeness (default: true)', default: true },
+      },
+      required: ['text'],
+    },
+  },
+  {
+    name: 'identify_gaps',
+    description: 'Systematically identify research gaps through topic clustering, temporal analysis, and methodological gap detection',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        studies: {
+          type: 'array',
+          description: 'Array of studies to analyze for gaps',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              title: { type: 'string' },
+              abstract: { type: 'string' },
+              year: { type: 'number' },
+              study_design: { type: 'string' },
+              population: { type: 'string' },
+              intervention: { type: 'string' },
+              outcome: { type: 'string' },
+              geographic_location: { type: 'string' },
+            },
+            required: ['id', 'title', 'abstract', 'year', 'study_design'],
+          },
+        },
+        min_confidence: { type: 'number', description: 'Minimum confidence threshold (0-1, default: 0.5)', default: 0.5 },
+        identify_temporal_gaps: { type: 'boolean', description: 'Identify temporal gaps (default: true)', default: true },
+        identify_methodological_gaps: { type: 'boolean', description: 'Identify methodological gaps (default: true)', default: true },
+        identify_population_gaps: { type: 'boolean', description: 'Identify population gaps (default: true)', default: true },
+        identify_geographic_gaps: { type: 'boolean', description: 'Identify geographic gaps (default: true)', default: true },
+      },
+      required: ['studies'],
+    },
+  },
+
+  // Phase 2 Tools (v5.1.0) - Planner Agent
+  {
+    name: 'predict_timeline',
+    description: 'Machine learning-based project timeline forecasting for systematic reviews with risk identification',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        project_params: {
+          type: 'object',
+          properties: {
+            total_citations: { type: 'number', description: 'Total number of citations to screen' },
+            databases_searched: { type: 'number', description: 'Number of databases searched' },
+            reviewers_count: { type: 'number', description: 'Number of reviewers on the team' },
+            study_type: {
+              type: 'string',
+              enum: ['rct', 'observational', 'mixed', 'qualitative'],
+              description: 'Primary study type',
+            },
+            meta_analysis_planned: { type: 'boolean', description: 'Whether meta-analysis is planned' },
+            team_experience: {
+              type: 'string',
+              enum: ['novice', 'intermediate', 'expert'],
+              description: 'Team experience level',
+            },
+            complexity: {
+              type: 'string',
+              enum: ['low', 'medium', 'high'],
+              description: 'Project complexity level',
+            },
+          },
+          required: ['total_citations', 'databases_searched', 'reviewers_count', 'study_type', 'meta_analysis_planned', 'team_experience', 'complexity'],
+        },
+        include_confidence_intervals: { type: 'boolean', description: 'Include confidence intervals (default: true)', default: true },
+        identify_risks: { type: 'boolean', description: 'Identify risk factors (default: true)', default: true },
+        suggest_resources: { type: 'boolean', description: 'Suggest resource allocations (default: true)', default: true },
+      },
+      required: ['project_params'],
+    },
+  },
 ];
 
 /**
@@ -1078,7 +1391,7 @@ const TOOLS: Tool[] = [
 const server = new Server(
   {
     name: 'medresearch-ai-mcp',
-    version: '4.0.0',
+    version: '5.1.0',
   },
   {
     capabilities: {
@@ -1177,6 +1490,28 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return await checkPRISMACompliance(args as any);
       case 'create_project_dashboard':
         return await createProjectDashboard(args as any);
+
+      // Phase 2 Tools (v5.1.0)
+      case 'extract_data_nlp':
+        return await extractDataNLP(args as any);
+      case 'detect_duplicates':
+        return await detectDuplicates(args as any);
+      case 'assess_study_quality':
+        return await assessStudyQuality(args as any);
+      case 'format_citations':
+        return await formatCitations(args as any);
+      case 'generate_references':
+        return await generateReferences(args as any);
+      case 'generate_manuscript_template':
+        return await generateManuscriptTemplate(args as any);
+      case 'score_research_question':
+        return await scoreResearchQuestion(args as any);
+      case 'extract_pico':
+        return await extractPICO(args as any);
+      case 'identify_gaps':
+        return await identifyGaps(args as any);
+      case 'predict_timeline':
+        return await predictTimeline(args as any);
 
       default:
         throw new Error(`Unknown tool: ${name}`);
