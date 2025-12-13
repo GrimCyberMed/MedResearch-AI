@@ -1,6 +1,6 @@
 {
   "name": "medresearch-ai",
-  "version": "6.2.0",
+  "version": "6.4.0",
   "description": "MedResearch AI - Multi-Agent System for Systematic Reviews with Advanced Biostatistics & Memory",
   "main": "index.js",
   "type": "module",

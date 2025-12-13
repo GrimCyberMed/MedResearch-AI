@@ -1,0 +1,207 @@
+
+> medresearch-ai@6.0.0-beta test
+> node --test tests/test-grammar-checking.js
+
+🧪 Grammar and Style Checking Tool - Test Suite
+
+============================================================
+
+🚀 Starting Grammar and Style Checking Tests...
+
+
+📋 Test 1: Spelling Error Detection
+------------------------------------------------------------
+2025-12-13 13:25:27 [[32minfo[39m]: Starting grammar check for 168 characters
+2025-12-13 13:25:27 [[32minfo[39m]: Found 4 spelling errors
+2025-12-13 13:25:27 [[32minfo[39m]: Found 0 style/grammar issues
+2025-12-13 13:25:27 [[32minfo[39m]: Grammar check complete: 4 issues found, score: 80.0%
+✅ Total errors: 4
+✅ Spelling errors: 4
+✅ Grammar score: 80.0%
+
+📊 Detected Errors:
+   1. "occured" → "occurred" (Spelling error: "occured" should be "occurred")
+   2. "recieved" → "received" (Spelling error: "recieved" should be "received")
+   3. "definately" → "definitely" (Spelling error: "definately" should be "definitely")
+   4. "reccomend" → "recommend" (Spelling error: "reccomend" should be "recommend")
+
+✅ TEST PASSED: Correctly detected spelling errors
+
+📋 Test 2: Contraction Detection (Academic Style)
+------------------------------------------------------------
+2025-12-13 13:25:27 [[32minfo[39m]: Starting grammar check for 168 characters
+2025-12-13 13:25:27 [[32minfo[39m]: Found 4 style/grammar issues
+2025-12-13 13:25:27 [[32minfo[39m]: Grammar check complete: 4 issues found, score: 92.0%
+✅ Total errors: 4
+✅ Style issues: 4
+
+📊 Detected Contractions:
+   1. "didn't" → "did not"
+   2. "can't" → "cannot"
+   3. "wasn't" → "was not"
+   4. "don't" → "do not"
+
+✅ TEST PASSED: Correctly detected contractions
+
+📋 Test 3: Informal Language Detection
+------------------------------------------------------------
+2025-12-13 13:25:27 [[32minfo[39m]: Starting grammar check for 184 characters
+2025-12-13 13:25:27 [[32minfo[39m]: Found 4 style/grammar issues
+2025-12-13 13:25:27 [[32minfo[39m]: Grammar check complete: 4 issues found, score: 92.0%
+✅ Total errors: 4
+✅ Style issues: 4
+
+📊 Detected Informal Language:
+   1. "a lot of" → "many" (Avoid informal language in academic writing)
+   2. "pretty much" → "approximately" (Avoid informal language in academic writing)
+   3. "really" → "" (Avoid informal language in academic writing)
+   4. "very" → "" (Avoid informal language in academic writing)
+
+✅ TEST PASSED: Correctly detected informal language
+
+📋 Test 4: First Person Detection
+------------------------------------------------------------
+2025-12-13 13:25:27 [[32minfo[39m]: Starting grammar check for 153 characters
+2025-12-13 13:25:27 [[32minfo[39m]: Found 1 style/grammar issues
+2025-12-13 13:25:27 [[32minfo[39m]: Grammar check complete: 1 issues found, score: 99.0%
+✅ Total errors: 1
+✅ Style suggestions: 1
+
+📊 Detected First Person:
+   1. "I" → "I"
+
+⚠️ TEST WARNING: Expected more first person detections
+
+📋 Test 5: Correction Application
+------------------------------------------------------------
+2025-12-13 13:25:27 [[32minfo[39m]: Starting grammar check for 68 characters
+2025-12-13 13:25:27 [[32minfo[39m]: Found 2 spelling errors
+2025-12-13 13:25:27 [[32minfo[39m]: Found 0 style/grammar issues
+2025-12-13 13:25:27 [[32minfo[39m]: Grammar check complete: 2 issues found, score: 90.0%
+✅ Original text: "This study occured in 2020. The results were definately significant."
+✅ Corrected text: "This study occurred in 2020. The results were definitely significant."
+✅ Errors corrected: 2
+
+✅ TEST PASSED: Corrections applied successfully
+
+📋 Test 6: Grammar Score Calculation
+------------------------------------------------------------
+2025-12-13 13:25:27 [[32minfo[39m]: Starting grammar check for 213 characters
+2025-12-13 13:25:27 [[32minfo[39m]: Found 0 spelling errors
+2025-12-13 13:25:27 [[32minfo[39m]: Found 4 style/grammar issues
+2025-12-13 13:25:27 [[32minfo[39m]: Grammar check complete: 4 issues found, score: 80.0%
+2025-12-13 13:25:27 [[32minfo[39m]: Starting grammar check for 157 characters
+2025-12-13 13:25:27 [[32minfo[39m]: Found 0 spelling errors
+2025-12-13 13:25:27 [[32minfo[39m]: Found 8 style/grammar issues
+2025-12-13 13:25:27 [[32minfo[39m]: Grammar check complete: 8 issues found, score: 75.0%
+✅ Clean text score: 80.0%
+✅ Error-prone text score: 75.0%
+✅ Clean text errors: 4
+✅ Error-prone text errors: 8
+
+✅ TEST PASSED: Grammar score calculated correctly
+
+📋 Test 7: Statistics Calculation
+------------------------------------------------------------
+2025-12-13 13:25:27 [[32minfo[39m]: Starting grammar check for 148 characters
+2025-12-13 13:25:27 [[32minfo[39m]: Found 0 spelling errors
+2025-12-13 13:25:27 [[32minfo[39m]: Found 3 style/grammar issues
+2025-12-13 13:25:27 [[32minfo[39m]: Grammar check complete: 3 issues found, score: 85.0%
+✅ Word count: 21
+✅ Sentence count: 5
+✅ Avg sentence length: 4.2 words
+✅ Total errors: 3
+
+✅ TEST PASSED: Statistics calculated correctly
+
+📋 Test 8: Report Generation
+------------------------------------------------------------
+2025-12-13 13:25:27 [[32minfo[39m]: Starting grammar check for 151 characters
+2025-12-13 13:25:27 [[32minfo[39m]: Found 2 spelling errors
+2025-12-13 13:25:27 [[32minfo[39m]: Found 5 style/grammar issues
+2025-12-13 13:25:27 [[32minfo[39m]: Grammar check complete: 7 issues found, score: 71.0%
+✅ Report generated: 1330 characters
+✅ Contains summary: true
+✅ Contains errors: true
+
+📊 Report Preview:
+# Grammar and Style Check Report
+
+## Summary
+
+- **Grammar Score**: 71.0%
+- **Total Issues**: 7
+- **Word Count**: 20
+- **Sentence Count**: 3
+- **Avg Sentence Length**: 6.7 words
+
+## Issues by Type
+
+- **Spelling**: 2
+- **Style**: 2
+- **Punctuation**: 3
+
+## Issues by Severity
+
+- ❌ **Error**: 5
+- ⚠️ **Warning**: 2
+
+## ❌ Errors (5)
+
+### 1. PUNCTUATION - Line 2
+
+**Original**: `      `
+
+**Correction**: ` `
+
+**Explanation**: Remove extra spaces
+
+### 2. SPELLING - Line 2
+
+**Original**: `occured`
+
+**Corre...
+
+✅ TEST PASSED: Report generated successfully
+
+📋 Test 9: Performance Test (Large Text)
+------------------------------------------------------------
+2025-12-13 13:25:27 [[32minfo[39m]: Starting grammar check for 11650 characters
+2025-12-13 13:25:27 [[32minfo[39m]: Found 0 spelling errors
+2025-12-13 13:25:27 [[32minfo[39m]: Found 200 style/grammar issues
+2025-12-13 13:25:27 [[32minfo[39m]: Grammar check complete: 200 issues found, score: 31.0%
+✅ Text length: 11650 characters
+✅ Word count: 1450
+✅ Processing time: 3ms
+✅ Time per 100 words: 0ms
+
+✅ TEST PASSED: Performance within acceptable limits
+
+============================================================
+📊 TEST SUMMARY
+============================================================
+✅ Spelling Errors
+✅ Contractions
+✅ Informal Language
+✅ First Person
+✅ Correction Application
+✅ Grammar Score
+✅ Statistics
+✅ Report Generation
+✅ Performance
+
+============================================================
+TOTAL: 9/9 tests passed (100%)
+============================================================
+
+🎉 ALL TESTS PASSED! Grammar Checking Tool is working correctly.
+
+✔ tests\test-grammar-checking.js (189.0111ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 197.7947

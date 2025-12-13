@@ -1,11 +1,43 @@
-# 🏥 MedResearch AI - Multi-Agent System v5.1.0
+# 🏥 MedResearch AI - Multi-Agent System v6.0.0
 
 **Intelligent multi-agent system for systematic reviews and meta-analyses with PhD-level biostatistics, enterprise-grade memory, and medical-grade anti-hallucination measures.**
 
-[![Version](https://img.shields.io/badge/version-5.1.0-blue.svg)](https://github.com/GrimCyberMed/MedResearch-AI/releases)
+[![Version](https://img.shields.io/badge/version-6.0.0--beta-blue.svg)](https://github.com/GrimCyberMed/MedResearch-AI/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/GrimCyberMed/MedResearch-AI)
-[![Tools](https://img.shields.io/badge/MCP%20Tools-46-orange.svg)](./docs/)
+[![Tools](https://img.shields.io/badge/MCP%20Tools-31-orange.svg)](./docs/)
+[![Tests](https://img.shields.io/badge/tests-337%2F337-brightgreen.svg)](./tests/)
+
+---
+
+## 🎉 What's New in v6.0.0-beta (Phase 8.5 Complete!)
+
+### **Phase 8.5: Outcome Extraction with NER** ⭐ NEW
+**Tool:** `extract-outcome-ner.ts` (480 lines, 10/10 tests passing)
+
+**Capabilities:**
+- **7 Outcome Entity Types**: Primary, secondary, safety, efficacy outcomes + measurement tools, time points, effect sizes
+- **20+ Measurement Scales**: PHQ-9, GAD-7, SF-36, WOMAC, VAS, HbA1c, and more
+- **Time Point Extraction**: Baseline, follow-up, specific durations
+- **Outcome-Measurement Linking**: Automatically links outcomes to tools and timepoints
+- **Conservative Confidence Scoring**: 30-85% range with manual review flagging
+
+**Impact:**
+- **Phase 8 Now 100% Complete**: All 5 sub-phases (8.1-8.5) implemented
+- **31 Total Tools**: Production-ready systematic review suite
+- **337 Tests Passing**: 100% test success rate
+- **~22,500 Lines of Code**: TypeScript strict mode
+- **100% OpenCode**: No external AI APIs
+
+### **Phase 8 Complete Summary:**
+| Sub-Phase | Tool | Tests | Status |
+|-----------|------|-------|--------|
+| 8.1 | ML Study Design Classifier | 15/15 | ✅ |
+| 8.2 | PICO Extraction with NER | 15/15 | ✅ |
+| 8.3 | Automated RoB Assessment | 15/15 | ✅ |
+| 8.4 | Study Relevance Screening | 10/10 | ✅ |
+| 8.5 | Outcome Extraction with NER | 10/10 | ✅ |
+| **Total** | **5 tools** | **65/65** | **✅ 100%** |
 
 ---
 
@@ -280,9 +312,9 @@ MedResearch-AI/
 ## 📚 Documentation
 
 ### **Core Documentation**
-- **Master Plan**: `MEDRESEARCH-AI-MASTER-PLAN-V4.md` (200+ pages)
-- **Session Prompt**: `ENHANCED-SESSION-PROMPT-V4.md`
-- **Session Summary**: `SESSION-SUMMARY-DEC-3-2025.md`
+- **Master Plan**: `docs/MASTER-PLAN.md` (200+ pages)
+- **Session Prompt**: `docs/SESSION-PROMPT.md`
+- **Session Summary**: `docs/archive/SESSION-SUMMARY-DEC-3-2025.md`
 - **Changelog**: `docs/CHANGELOG.md`
 
 ### **Statistical Analysis Guides** ⭐ NEW

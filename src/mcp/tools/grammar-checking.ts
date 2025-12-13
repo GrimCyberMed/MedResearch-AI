@@ -200,6 +200,7 @@ const COMMON_MEDICAL_SPELLING_ERRORS: Record<string, string> = {
   // General spelling errors
   'occured': 'occurred',
   'recieve': 'receive',
+  'recieved': 'received',  // Past tense variant
   'seperate': 'separate',
   'definately': 'definitely',
   'accomodate': 'accommodate',

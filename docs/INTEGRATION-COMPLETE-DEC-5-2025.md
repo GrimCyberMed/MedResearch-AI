@@ -301,7 +301,7 @@ If proceeding with Phase 2 after integration testing:
 
 ## 🔗 Related Documents
 
-- **Master Plan**: `MEDRESEARCH-AI-MASTER-PLAN-V4.md`
+- **Master Plan**: `MASTER-PLAN.md`
 - **Upgrade Plan**: `docs/AGENT-UPGRADE-PLAN-V5.md`
 - **Progress Tracking**: `docs/IMPLEMENTATION-PROGRESS-DEC-5-2025.md`
 - **Phase 1 Summary**: `docs/PHASE-1-COMPLETION-SUMMARY.md`

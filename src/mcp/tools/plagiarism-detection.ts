@@ -24,9 +24,13 @@ import { logger } from '../../common/logger.js';
 
 /**
  * Configuration for plagiarism detection
+ * 
+ * Optimized for medical/academic text:
+ * - Shingle size 4: Balance between precision and recall
+ * - Threshold 15%: Catches moderate similarities
  */
 export interface PlagiarismConfig {
-  shingleSize: number;           // Default: 5 (5-word sequences)
+  shingleSize: number;           // Default: 4 (4-word sequences, optimal for medical text)
   minSimilarityThreshold: number; // Default: 0.15 (15% similarity)
   maxResults: number;             // Default: 10
   checkCitations: boolean;        // Default: true
@@ -203,23 +207,39 @@ function findMatchedSegments(
 
 /**
  * Determine match confidence based on similarity score and segment length
+ * 
+ * Tuned for medical/academic text plagiarism detection:
+ * - High: Strong evidence of copying (≥60% similarity OR multiple long segments)
+ * - Medium: Moderate evidence (≥30% similarity OR some segments)
+ * - Low: Weak evidence (< 30% similarity)
  */
 function determineConfidence(
   similarityScore: number,
   segmentCount: number,
   avgSegmentLength: number
 ): 'high' | 'medium' | 'low' {
-  if (similarityScore >= 0.5 && segmentCount >= 5 && avgSegmentLength >= 10) {
+  // High confidence: Strong similarity OR many long segments
+  if (similarityScore >= 0.6 || (segmentCount >= 4 && avgSegmentLength >= 8)) {
     return 'high';
-  } else if (similarityScore >= 0.3 && segmentCount >= 3 && avgSegmentLength >= 7) {
+  } 
+  // Medium confidence: Moderate similarity OR some segments
+  else if (similarityScore >= 0.3 || (segmentCount >= 2 && avgSegmentLength >= 5)) {
     return 'medium';
-  } else {
+  } 
+  // Low confidence: Weak evidence
+  else {
     return 'low';
   }
 }
 
 /**
  * Classify match type based on characteristics
+ * 
+ * Tuned for medical/academic text:
+ * - Exact: High similarity (≥70%) with long segments
+ * - Paraphrase: Moderate similarity (≥25%) with medium segments
+ * - Citation: Has citations and some similarity
+ * - Self: Low similarity or short segments
  */
 function classifyMatchType(
   similarityScore: number,
@@ -230,13 +250,20 @@ function classifyMatchType(
     ? segments.reduce((sum, s) => sum + (s.endPosition - s.startPosition), 0) / segments.length
     : 0;
   
-  if (similarityScore >= 0.8 && avgSegmentLength >= 15) {
+  // Exact match: High similarity with substantial segments
+  if (similarityScore >= 0.7 && avgSegmentLength >= 10) {
     return 'exact';
-  } else if (hasCitations && similarityScore >= 0.3) {
+  } 
+  // Citation: Has citations and moderate similarity
+  else if (hasCitations && similarityScore >= 0.25) {
     return 'citation';
-  } else if (similarityScore >= 0.4 && avgSegmentLength >= 8) {
+  } 
+  // Paraphrase: Moderate similarity with some segments
+  else if (similarityScore >= 0.25 && avgSegmentLength >= 5) {
     return 'paraphrase';
-  } else {
+  } 
+  // Self/weak match: Low similarity
+  else {
     return 'self';
   }
 }
@@ -284,9 +311,9 @@ export async function checkPlagiarism(args: {
     databases = ['pubmed', 'europepmc', 'semanticscholar', 'lens'],
   } = args;
   
-  // Default configuration
+  // Default configuration (optimized for medical/academic text)
   const fullConfig: PlagiarismConfig = {
-    shingleSize: config.shingleSize || 5,
+    shingleSize: config.shingleSize || 4,  // 4-word sequences optimal for medical text
     minSimilarityThreshold: config.minSimilarityThreshold || 0.15,
     maxResults: config.maxResults || 10,
     checkCitations: config.checkCitations !== false,
@@ -386,7 +413,7 @@ export async function compareDocuments(args: {
   shingleSize?: number;
 }) {
   const startTime = Date.now();
-  const { document1, document2, shingleSize = 5 } = args;
+  const { document1, document2, shingleSize = 4 } = args;
   
   logger.info('Document comparison started', { 
     doc1Length: document1.length,

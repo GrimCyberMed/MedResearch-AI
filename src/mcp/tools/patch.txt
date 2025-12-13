@@ -1,0 +1,4 @@
+131c131 
+<   private async assessSelection(fullText: string, methodsText: string) { 
+--- 
+>   private async assessSelection(_fullText: string, methodsText: string) {

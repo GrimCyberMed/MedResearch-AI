@@ -91,7 +91,7 @@ export const enhancedLogger = winston.createLogger({
       maxFiles: 5,
       format: winston.format.combine(
         enhancedFormat,
-        winston.format((info) => {
+        winston.format((info: any) => {
           // Only log API-related messages
           if (info.metadata?.api || info.metadata?.apiKey || info.message?.includes('API')) {
             return info;
@@ -109,7 +109,7 @@ export const enhancedLogger = winston.createLogger({
       maxFiles: 5,
       format: winston.format.combine(
         enhancedFormat,
-        winston.format((info) => {
+        winston.format((info: any) => {
           // Only log tool-related messages
           if (info.metadata?.tool || info.metadata?.toolName) {
             return info;
@@ -127,7 +127,7 @@ export const enhancedLogger = winston.createLogger({
       maxFiles: 5,
       format: winston.format.combine(
         enhancedFormat,
-        winston.format((info) => {
+        winston.format((info: any) => {
           // Only log performance-related messages
           if (info.metadata?.duration_ms || info.metadata?.performance) {
             return info;
@@ -174,7 +174,7 @@ if (process.env.NODE_ENV !== 'production') {
   enhancedLogger.add(new winston.transports.Console({
     format: winston.format.combine(
       winston.format.colorize(),
-      winston.format.printf(({ level, message, timestamp, metadata }) => {
+      winston.format.printf(({ level, message, timestamp, metadata }: any) => {
         let msg = `${timestamp} [${level}]: ${message}`;
         
         // Add important metadata
@@ -182,7 +182,7 @@ if (process.env.NODE_ENV !== 'production') {
           const important = ['tool', 'api', 'error', 'duration_ms', 'status'];
           const relevantMeta = Object.keys(metadata)
             .filter(key => important.includes(key))
-            .reduce((obj, key) => {
+            .reduce((obj: Record<string, any>, key) => {
               obj[key] = metadata[key];
               return obj;
             }, {} as Record<string, any>);

@@ -1,0 +1,170 @@
+
+> medresearch-ai@6.0.0-beta test
+> node --test tests/test-ml-screening.js
+
+🧪 ML-Based Citation Screening Tool - Test Suite
+
+============================================================
+
+🚀 Starting ML-Based Citation Screening Tests...
+
+
+📋 Test 1: Basic Screening with Clear Criteria
+------------------------------------------------------------
+2025-12-13 13:41:32 [[32minfo[39m]: Starting ML-based screening for 8 citations
+2025-12-13 13:41:32 [[32minfo[39m]: Inclusion criteria: 16 key terms
+2025-12-13 13:41:32 [[32minfo[39m]: Calculated IDF for 139 unique terms
+2025-12-13 13:41:32 [[32minfo[39m]: ML screening complete: 0 relevant, 0 uncertain, 8 irrelevant
+2025-12-13 13:41:32 [[32minfo[39m]: Estimated time saved: 0.3 hours
+✅ Total citations: 8
+✅ Likely relevant: 0
+✅ Uncertain: 0
+✅ Likely irrelevant: 8
+✅ Time saved: 0.3 hours
+✅ Processing time: 4ms
+
+📊 Top 3 Most Relevant Citations:
+
+   1. C001: Efficacy of metformin in type 2 diabetes: a randomized contr...
+      Score: 32.1%
+      Recommendation: likely_irrelevant
+      Matched terms: metformin, type, diabetes, randomized, controlled
+
+   2. C002: Sulfonylureas versus metformin for glycemic control in type ...
+      Score: 14.9%
+      Recommendation: likely_irrelevant
+      Matched terms: sulfonylureas, metformin, glycemic, control, type
+
+   3. C006: Metformin and sulfonylurea combination therapy in type 2 dia...
+      Score: 14.9%
+      Recommendation: likely_irrelevant
+      Matched terms: metformin, type, diabetes, sulfonylureas, glycemic
+
+❌ TEST FAILED: Did not correctly identify relevant citations
+
+📋 Test 2: Screening with Narrow Criteria
+------------------------------------------------------------
+2025-12-13 13:41:32 [[32minfo[39m]: Starting ML-based screening for 8 citations
+2025-12-13 13:41:32 [[32minfo[39m]: Inclusion criteria: 9 key terms
+2025-12-13 13:41:32 [[32minfo[39m]: Calculated IDF for 141 unique terms
+2025-12-13 13:41:32 [[32minfo[39m]: ML screening complete: 0 relevant, 0 uncertain, 8 irrelevant
+2025-12-13 13:41:32 [[32minfo[39m]: Estimated time saved: 0.3 hours
+✅ Total citations: 8
+✅ Likely relevant: 0
+✅ Likely irrelevant: 8
+
+📊 Most Relevant Citation:
+   C003: Cardiovascular outcomes with metformin in diabetes patients...
+   Score: 36.4%
+
+✅ TEST PASSED: Correctly identified most relevant citation
+
+📋 Test 3: Screening with Unrelated Criteria
+------------------------------------------------------------
+2025-12-13 13:41:32 [[32minfo[39m]: Starting ML-based screening for 8 citations
+2025-12-13 13:41:32 [[32minfo[39m]: Inclusion criteria: 7 key terms
+2025-12-13 13:41:32 [[32minfo[39m]: Calculated IDF for 143 unique terms
+2025-12-13 13:41:32 [[32minfo[39m]: ML screening complete: 0 relevant, 0 uncertain, 8 irrelevant
+2025-12-13 13:41:32 [[32minfo[39m]: Estimated time saved: 0.3 hours
+✅ Total citations: 8
+✅ Likely relevant: 0
+✅ Likely irrelevant: 8
+
+✅ TEST PASSED: Correctly identified unrelated citations as irrelevant
+
+📋 Test 4: Testing Different Thresholds
+------------------------------------------------------------
+2025-12-13 13:41:32 [[32minfo[39m]: Starting ML-based screening for 8 citations
+2025-12-13 13:41:32 [[32minfo[39m]: Inclusion criteria: 6 key terms
+2025-12-13 13:41:32 [[32minfo[39m]: Calculated IDF for 138 unique terms
+2025-12-13 13:41:32 [[32minfo[39m]: ML screening complete: 1 relevant, 1 uncertain, 6 irrelevant
+2025-12-13 13:41:32 [[32minfo[39m]: Estimated time saved: 0.2 hours
+
+   Threshold 0.5:
+   - Likely relevant: 1
+   - Uncertain: 1
+   - Likely irrelevant: 6
+2025-12-13 13:41:32 [[32minfo[39m]: Starting ML-based screening for 8 citations
+2025-12-13 13:41:32 [[32minfo[39m]: Inclusion criteria: 6 key terms
+2025-12-13 13:41:32 [[32minfo[39m]: Calculated IDF for 138 unique terms
+2025-12-13 13:41:32 [[32minfo[39m]: ML screening complete: 1 relevant, 1 uncertain, 6 irrelevant
+2025-12-13 13:41:32 [[32minfo[39m]: Estimated time saved: 0.2 hours
+
+   Threshold 0.7:
+   - Likely relevant: 1
+   - Uncertain: 1
+   - Likely irrelevant: 6
+2025-12-13 13:41:32 [[32minfo[39m]: Starting ML-based screening for 8 citations
+2025-12-13 13:41:32 [[32minfo[39m]: Inclusion criteria: 6 key terms
+2025-12-13 13:41:32 [[32minfo[39m]: Calculated IDF for 138 unique terms
+2025-12-13 13:41:32 [[32minfo[39m]: ML screening complete: 1 relevant, 1 uncertain, 6 irrelevant
+2025-12-13 13:41:32 [[32minfo[39m]: Estimated time saved: 0.2 hours
+
+   Threshold 0.9:
+   - Likely relevant: 1
+   - Uncertain: 1
+   - Likely irrelevant: 6
+
+✅ TEST PASSED: Threshold correctly affects relevance classification
+
+📋 Test 5: Performance Test (100 citations)
+------------------------------------------------------------
+2025-12-13 13:41:32 [[32minfo[39m]: Starting ML-based screening for 100 citations
+2025-12-13 13:41:32 [[32minfo[39m]: Inclusion criteria: 10 key terms
+2025-12-13 13:41:32 [[32minfo[39m]: Calculated IDF for 139 unique terms
+2025-12-13 13:41:32 [[32minfo[39m]: Screened 100/100 citations
+2025-12-13 13:41:32 [[32minfo[39m]: ML screening complete: 0 relevant, 0 uncertain, 100 irrelevant
+2025-12-13 13:41:32 [[32minfo[39m]: Estimated time saved: 3.3 hours
+✅ Total citations: 100
+✅ Processing time: 3ms
+✅ Average time per citation: 0ms
+✅ Time saved: 3.3 hours
+
+✅ TEST PASSED: Performance within acceptable limits
+
+📋 Test 6: Testing Recommendations Generation
+------------------------------------------------------------
+2025-12-13 13:41:32 [[32minfo[39m]: Starting ML-based screening for 8 citations
+2025-12-13 13:41:32 [[32minfo[39m]: Inclusion criteria: 6 key terms
+2025-12-13 13:41:32 [[32minfo[39m]: Calculated IDF for 138 unique terms
+2025-12-13 13:41:32 [[32minfo[39m]: ML screening complete: 0 relevant, 0 uncertain, 8 irrelevant
+2025-12-13 13:41:32 [[32minfo[39m]: Estimated time saved: 0.3 hours
+✅ Generated 4 recommendations:
+   1. No citations met the relevance threshold of 70%
+   2. Consider lowering the threshold or revising inclusion criteria
+   3. Consider skipping 8 likely irrelevant citations (low priority)
+   4. Estimated time saved: 0.3 hours
+
+✅ TEST PASSED: Recommendations generated correctly
+
+============================================================
+📊 TEST SUMMARY
+============================================================
+❌ Basic Screening
+✅ Narrow Criteria
+✅ Unrelated Criteria
+✅ Different Thresholds
+✅ Performance
+✅ Recommendations
+
+============================================================
+TOTAL: 5/6 tests passed (83%)
+============================================================
+
+⚠️ SOME TESTS FAILED. Please review the results above.
+
+✖ tests\test-ml-screening.js (159.5422ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 168.9387
+
+✖ failing tests:
+
+test at tests\test-ml-screening.js:1:1
+✖ tests\test-ml-screening.js (159.5422ms)
+  'test failed'

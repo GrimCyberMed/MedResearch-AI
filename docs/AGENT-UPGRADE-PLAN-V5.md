@@ -705,7 +705,7 @@ npm test
 
 ### Related Documents
 
-- `MEDRESEARCH-AI-MASTER-PLAN-V4.md` - System architecture
+- `MASTER-PLAN.md` - System architecture
 - `DATA-ANALYSIS-AGENT-RESEARCH.md` - Statistician Agent design
 - `AGENT-ENHANCEMENT-RESEARCH.md` - Initial research findings
 - `CHANGELOG.md` - Version history
