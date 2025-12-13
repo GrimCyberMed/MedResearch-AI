@@ -55,6 +55,19 @@ import { scoreResearchQuestion } from './tools/research-question-scoring.js';
 import { extractPICO } from './tools/pico-extraction.js';
 import { identifyGaps } from './tools/literature-gap-identification.js';
 import { predictTimeline } from './tools/ml-timeline-prediction.js';
+// Phase 1 Tools (v6.0.0) - Study Design Classification
+import { classifyStudyDesign } from './tools/classify-study-design.js';
+// Phase 3 Tools (v6.2.0) - Advanced Features
+import { searchMemorySemantic } from './tools/search-memory-semantic.js';
+import { summarizeProjectHistory } from './tools/summarize-project-history.js';
+import { analyzeCitationNetwork } from './tools/analyze-citation-network.js';
+import { enrichCitationMetadata } from './tools/enrich-citation-metadata.js';
+import { screenWithActiveLearning } from './tools/screen-with-active-learning.js';
+import { draftManuscriptSection } from './tools/draft-manuscript-section.js';
+import { buildSearchStrategy } from './tools/build-search-strategy.js';
+import { validateSearchStrategy } from './tools/validate-search-strategy.js';
+import { detectDuplicatesAdvanced } from './tools/detect-duplicates-advanced.js';
+import { assessRiskOfBiasAuto } from './tools/assess-risk-of-bias-auto.js';
 
 /**
  * Tool definitions for MCP
@@ -1383,6 +1396,220 @@ const TOOLS: Tool[] = [
       required: ['project_params'],
     },
   },
+
+  // Phase 1 Tools (v6.0.0) - Study Design Classification
+  {
+    name: 'classify_study_design',
+    description: 'Automatically classify study design type (RCT, cohort, case-control, etc.) from title/abstract/methods with 90% target accuracy using hybrid keyword + ML approach',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          description: 'Study title (required)',
+        },
+        abstract: {
+          type: 'string',
+          description: 'Study abstract (optional but recommended)',
+        },
+        methods: {
+          type: 'string',
+          description: 'Methods section text (optional, improves accuracy)',
+        },
+        full_text: {
+          type: 'string',
+          description: 'Full text of study (optional)',
+        },
+        publication_type: {
+          type: 'string',
+          description: 'Publication type from database (e.g., PubMed)',
+        },
+        mesh_terms: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'MeSH terms from PubMed',
+        },
+        confidence_threshold: {
+          type: 'number',
+          description: 'Minimum confidence threshold for classification (0-1, default: 0.7)',
+          default: 0.7,
+        },
+        use_ml: {
+          type: 'boolean',
+          description: 'Use ML-based classification (default: false, Phase 1.1.3)',
+          default: false,
+        },
+      },
+      required: ['title'],
+    },
+  },
+
+  // Phase 3 Tools (v6.2.0) - Advanced Features
+  {
+    name: 'search_memory_semantic',
+    description: 'Perform semantic search over project memory using TF-IDF and cosine similarity',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        query: { type: 'string', description: 'Search query (natural language)' },
+        projectPath: { type: 'string', description: 'Path to project directory' },
+        limit: { type: 'number', description: 'Maximum results (default: 10)', default: 10 },
+        minScore: { type: 'number', description: 'Minimum relevance score (0-1, default: 0.1)', default: 0.1 },
+        types: { type: 'array', items: { type: 'string' }, description: 'Filter by entry types' },
+        dateFrom: { type: 'string', description: 'Filter from date (ISO format)' },
+        dateTo: { type: 'string', description: 'Filter to date (ISO format)' },
+        tags: { type: 'array', items: { type: 'string' }, description: 'Filter by tags' },
+        phase: { type: 'string', description: 'Filter by project phase' },
+        agent: { type: 'string', description: 'Filter by agent name' },
+      },
+      required: ['query', 'projectPath'],
+    },
+  },
+  {
+    name: 'summarize_project_history',
+    description: 'Generate comprehensive summary of project history from memory',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        projectPath: { type: 'string', description: 'Path to project directory' },
+        format: { type: 'string', enum: ['markdown', 'json', 'html'], description: 'Output format', default: 'markdown' },
+        includeTimeline: { type: 'boolean', description: 'Include timeline', default: true },
+        includeMilestones: { type: 'boolean', description: 'Include milestones', default: true },
+        includeDecisions: { type: 'boolean', description: 'Include decisions', default: true },
+        includeMetrics: { type: 'boolean', description: 'Include metrics', default: true },
+        dateFrom: { type: 'string', description: 'Filter from date' },
+        dateTo: { type: 'string', description: 'Filter to date' },
+        phases: { type: 'array', items: { type: 'string' }, description: 'Filter by phases' },
+      },
+      required: ['projectPath'],
+    },
+  },
+  {
+    name: 'analyze_citation_network',
+    description: 'Analyze citation relationships to identify influential papers and clusters',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        citationsFile: { type: 'string', description: 'Path to citations JSON file' },
+        analysisType: { type: 'string', enum: ['full', 'influence', 'clusters', 'trends'], default: 'full' },
+        minCitations: { type: 'number', description: 'Minimum citations required', default: 0 },
+        clusterCount: { type: 'number', description: 'Number of clusters', default: 5 },
+        outputFormat: { type: 'string', enum: ['json', 'graphml', 'csv'], default: 'json' },
+      },
+      required: ['citationsFile'],
+    },
+  },
+  {
+    name: 'enrich_citation_metadata',
+    description: 'Enrich citation metadata from free APIs (CrossRef, PubMed, Unpaywall)',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        citationsFile: { type: 'string', description: 'Path to citations file' },
+        enrichmentSources: { type: 'array', items: { type: 'string' } },
+        includeAbstracts: { type: 'boolean', default: true },
+        includeKeywords: { type: 'boolean', default: true },
+        includeOpenAccess: { type: 'boolean', default: true },
+        outputFile: { type: 'string' },
+      },
+      required: ['citationsFile'],
+    },
+  },
+  {
+    name: 'screen_with_active_learning',
+    description: 'Prioritize citations using active learning to reduce manual screening',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        citationsFile: { type: 'string' },
+        inclusionCriteria: { type: 'string' },
+        batchSize: { type: 'number', default: 50 },
+        stoppingThreshold: { type: 'number', default: 0.95 },
+        outputFile: { type: 'string' },
+      },
+      required: ['citationsFile', 'inclusionCriteria'],
+    },
+  },
+  {
+    name: 'draft_manuscript_section',
+    description: 'Generate draft manuscript sections using templates',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        section: { type: 'string', enum: ['abstract', 'introduction', 'methods', 'results', 'discussion', 'conclusion'] },
+        projectPath: { type: 'string' },
+        template: { type: 'string', enum: ['prisma', 'consort', 'strobe', 'generic'], default: 'generic' },
+        wordLimit: { type: 'number' },
+        includeReferences: { type: 'boolean', default: true },
+        outputFile: { type: 'string' },
+      },
+      required: ['section', 'projectPath'],
+    },
+  },
+  {
+    name: 'build_search_strategy',
+    description: 'Build comprehensive search strategies for multiple databases',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        pico: {
+          type: 'object',
+          properties: {
+            population: { type: 'array', items: { type: 'string' } },
+            intervention: { type: 'array', items: { type: 'string' } },
+            comparison: { type: 'array', items: { type: 'string' } },
+            outcome: { type: 'array', items: { type: 'string' } },
+          },
+          required: ['population', 'intervention', 'outcome'],
+        },
+        databases: { type: 'array', items: { type: 'string' } },
+        includeFilters: { type: 'object' },
+      },
+      required: ['pico'],
+    },
+  },
+  {
+    name: 'validate_search_strategy',
+    description: 'Validate search strategy for syntax and completeness',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        searchStrategy: { type: 'string' },
+        database: { type: 'string', enum: ['pubmed', 'embase', 'cochrane', 'web-of-science'] },
+        knownRelevantStudies: { type: 'array', items: { type: 'string' } },
+        checkSensitivity: { type: 'boolean', default: true },
+      },
+      required: ['searchStrategy', 'database'],
+    },
+  },
+  {
+    name: 'detect_duplicates_advanced',
+    description: 'Advanced duplicate detection with fuzzy matching',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        citationsFile: { type: 'string' },
+        algorithm: { type: 'string', enum: ['levenshtein', 'jaccard', 'combined'], default: 'combined' },
+        threshold: { type: 'number', default: 0.85 },
+        outputFile: { type: 'string' },
+      },
+      required: ['citationsFile'],
+    },
+  },
+  {
+    name: 'assess_risk_of_bias_auto',
+    description: 'Automated risk of bias assessment using text analysis',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        studiesFile: { type: 'string' },
+        tool: { type: 'string', enum: ['rob2', 'robins-i', 'newcastle-ottawa'], default: 'rob2' },
+        confidenceThreshold: { type: 'number', default: 0.6 },
+        outputFile: { type: 'string' },
+      },
+      required: ['studiesFile'],
+    },
+  },
 ];
 
 /**
@@ -1391,7 +1618,7 @@ const TOOLS: Tool[] = [
 const server = new Server(
   {
     name: 'medresearch-ai-mcp',
-    version: '5.1.0',
+    version: '6.0.0-beta',
   },
   {
     capabilities: {
@@ -1512,6 +1739,41 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return await identifyGaps(args as any);
       case 'predict_timeline':
         return await predictTimeline(args as any);
+
+      // Phase 1 Tools (v6.0.0) - Study Design Classification
+      case 'classify_study_design':
+        return await classifyStudyDesign(args as any);
+
+      // Phase 3 Tools (v6.2.0) - Advanced Features
+      case 'search_memory_semantic':
+        return await searchMemorySemantic(args as any);
+      
+      case 'summarize_project_history':
+        return await summarizeProjectHistory(args as any);
+      
+      case 'analyze_citation_network':
+        return await analyzeCitationNetwork(args as any);
+      
+      case 'enrich_citation_metadata':
+        return await enrichCitationMetadata(args as any);
+      
+      case 'screen_with_active_learning':
+        return await screenWithActiveLearning(args as any);
+      
+      case 'draft_manuscript_section':
+        return await draftManuscriptSection(args as any);
+      
+      case 'build_search_strategy':
+        return await buildSearchStrategy(args as any);
+      
+      case 'validate_search_strategy':
+        return await validateSearchStrategy(args as any);
+      
+      case 'detect_duplicates_advanced':
+        return await detectDuplicatesAdvanced(args as any);
+      
+      case 'assess_risk_of_bias_auto':
+        return await assessRiskOfBiasAuto(args as any);
 
       default:
         throw new Error(`Unknown tool: ${name}`);
