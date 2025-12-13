@@ -253,8 +253,8 @@
 4. `SESSION-PROGRESS-DEC-3-2025.md` - This file
 
 ### For Implementation
-5. `MEDRESEARCH-AI-MASTER-PLAN-V4.md` - Complete specifications
-6. `ENHANCED-SESSION-PROMPT-V4.md` - Session prompt
+5. `../MASTER-PLAN.md` - Complete specifications
+6. `../SESSION-PROMPT.md` - Session prompt
 
 ---
 

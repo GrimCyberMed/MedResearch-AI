@@ -1,0 +1,1108 @@
+{
+  "timestamp": "2025-12-13T16:31:36.673Z",
+  "version": "6.2.0",
+  "tools": {
+    "registered": [
+      "search_pubmed",
+      "search_europe_pmc",
+      "search_semantic_scholar",
+      "get_semantic_scholar_paper",
+      "search_lens",
+      "get_lens_work",
+      "search_clinicaltrials",
+      "get_clinical_trial",
+      "search_crossref",
+      "get_crossref_work",
+      "run_meta_analysis",
+      "generate_forest_plot",
+      "select_statistical_test",
+      "check_assumptions",
+      "validate_data",
+      "calculate_power",
+      "run_comprehensive_analysis",
+      "manage_citations",
+      "export_bibliography",
+      "generate_document",
+      "export_to_pdf",
+      "find_open_access",
+      "check_plagiarism",
+      "compare_documents",
+      "check_plagiarism_databases",
+      "verify_citations_batch",
+      "screen_citations_ml",
+      "check_grammar",
+      "check_prisma_compliance",
+      "create_project_dashboard",
+      "extract_data_nlp",
+      "detect_duplicates",
+      "assess_study_quality",
+      "format_citations",
+      "generate_references",
+      "generate_manuscript_template",
+      "score_research_question",
+      "extract_pico",
+      "identify_gaps",
+      "predict_timeline",
+      "classify_study_design",
+      "search_memory_semantic",
+      "summarize_project_history",
+      "analyze_citation_network",
+      "enrich_citation_metadata",
+      "screen_with_active_learning",
+      "draft_manuscript_section",
+      "build_search_strategy",
+      "validate_search_strategy",
+      "detect_duplicates_advanced",
+      "assess_risk_of_bias_auto"
+    ],
+    "implemented": [
+      "analyze-citation-network",
+      "assess-grade-evidence",
+      "assess-heterogeneity",
+      "assess-network-consistency",
+      "assess-network-geometry",
+      "assess-publication-bias",
+      "assess-quality-amstar2",
+      "assess-quality-casp",
+      "assess-quality-jbi",
+      "assess-quality-newcastle-ottawa",
+      "assess-quality-quadas2",
+      "assess-quality-rct-rob2",
+      "assess-quality-robis",
+      "assess-risk-of-bias-auto",
+      "assess-risk-of-bias-ml",
+      "build-search-strategy",
+      "calculate-effect-size-binary",
+      "calculate-effect-size-continuous",
+      "calculate-pooled-effect",
+      "citation-formatting",
+      "citation-manager",
+      "citation-verification",
+      "classify-study-design-ml",
+      "classify-study-design",
+      "clinicaltrials",
+      "crossref",
+      "detect-duplicates-advanced",
+      "detect-duplicates",
+      "document-generator",
+      "draft-manuscript-section",
+      "duplicate-detection",
+      "enrich-citation-metadata",
+      "export-formats",
+      "extract-data-nlp",
+      "extract-data-ocr",
+      "extract-outcome-ner",
+      "extract-pico-from-question",
+      "extract-pico-ner",
+      "generate-forest-plot-data",
+      "generate-forest-plot-svg",
+      "generate-funnel-plot-svg",
+      "generate-pdf-report",
+      "generate-prisma-flowchart",
+      "generate-quality-summary-table",
+      "generate-rob-traffic-light",
+      "generate-sof-table",
+      "grammar-checking",
+      "integrate-cochrane-library",
+      "integrate-europe-pmc-enhanced",
+      "integrate-prospero-registration",
+      "integrate-pubmed-api",
+      "integrate-reference-manager",
+      "integrate-restful-api",
+      "integrate-zotero-real",
+      "lens",
+      "literature-gap-identification",
+      "manuscript-templates",
+      "medical-databases",
+      "mesh-classifier",
+      "ml-screening",
+      "ml-timeline-prediction",
+      "nlp-data-extraction",
+      "optimize-resource-allocation",
+      "pico-extraction",
+      "plagiarism-database-integration",
+      "plagiarism-detection",
+      "predict-project-risks",
+      "prisma-compliance",
+      "project-dashboard",
+      "r-statistics",
+      "rank-treatments",
+      "reference-list-generation",
+      "research-question-scoring",
+      "research-workspace-manager",
+      "score-research-question",
+      "screen-study-relevance",
+      "screen-with-active-learning",
+      "search-memory-semantic",
+      "semantic-scholar",
+      "statistical-method-classifier",
+      "study-quality-assessment",
+      "summarize-project-history",
+      "unpaywall",
+      "validate-search-strategy"
+    ],
+    "unregistered": [
+      "assess-grade-evidence",
+      "assess-heterogeneity",
+      "assess-network-consistency",
+      "assess-network-geometry",
+      "assess-publication-bias",
+      "assess-quality-amstar2",
+      "assess-quality-casp",
+      "assess-quality-jbi",
+      "assess-quality-newcastle-ottawa",
+      "assess-quality-quadas2",
+      "assess-quality-rct-rob2",
+      "assess-quality-robis",
+      "assess-risk-of-bias-ml",
+      "calculate-effect-size-binary",
+      "calculate-effect-size-continuous",
+      "calculate-pooled-effect",
+      "citation-formatting",
+      "citation-manager",
+      "citation-verification",
+      "classify-study-design-ml",
+      "clinicaltrials",
+      "crossref",
+      "document-generator",
+      "duplicate-detection",
+      "export-formats",
+      "extract-data-ocr",
+      "extract-outcome-ner",
+      "extract-pico-from-question",
+      "extract-pico-ner",
+      "generate-forest-plot-data",
+      "generate-forest-plot-svg",
+      "generate-funnel-plot-svg",
+      "generate-pdf-report",
+      "generate-prisma-flowchart",
+      "generate-quality-summary-table",
+      "generate-rob-traffic-light",
+      "generate-sof-table",
+      "grammar-checking",
+      "integrate-cochrane-library",
+      "integrate-europe-pmc-enhanced",
+      "integrate-prospero-registration",
+      "integrate-pubmed-api",
+      "integrate-reference-manager",
+      "integrate-restful-api",
+      "integrate-zotero-real",
+      "lens",
+      "literature-gap-identification",
+      "manuscript-templates",
+      "medical-databases",
+      "mesh-classifier",
+      "ml-screening",
+      "ml-timeline-prediction",
+      "nlp-data-extraction",
+      "optimize-resource-allocation",
+      "pico-extraction",
+      "plagiarism-database-integration",
+      "plagiarism-detection",
+      "predict-project-risks",
+      "prisma-compliance",
+      "project-dashboard",
+      "r-statistics",
+      "rank-treatments",
+      "reference-list-generation",
+      "research-question-scoring",
+      "research-workspace-manager",
+      "screen-study-relevance",
+      "semantic-scholar",
+      "statistical-method-classifier",
+      "study-quality-assessment",
+      "unpaywall"
+    ]
+  },
+  "utilities": [
+    {
+      "name": "cache",
+      "file": "cache.ts",
+      "exports": [
+        "CacheOptions",
+        "CacheStats",
+        "CacheService",
+        "generateCacheKey",
+        "defaultCache"
+      ],
+      "lines": 229
+    },
+    {
+      "name": "command-manager",
+      "file": "command-manager.ts",
+      "exports": [
+        "Command",
+        "CommandContext",
+        "CommandExecutor",
+        "RollbackResult",
+        "CommandManager",
+        "commandManager"
+      ],
+      "lines": 595
+    },
+    {
+      "name": "enhanced-logger",
+      "file": "enhanced-logger.ts",
+      "exports": [
+        "enhancedLogger",
+        "logError",
+        "logCrash",
+        "logAPIError",
+        "logToolError",
+        "logMCPError",
+        "logPerformanceIssue",
+        "logWithContext",
+        "logSuccess",
+        "getErrorStats",
+        "cleanupOldLogs",
+        "exportCrashReport"
+      ],
+      "lines": 534
+    },
+    {
+      "name": "logger",
+      "file": "logger.ts",
+      "exports": [
+        "logger",
+        "logWithContext",
+        "logError",
+        "logPerformance"
+      ],
+      "lines": 118
+    },
+    {
+      "name": "quality-assessment-framework",
+      "file": "quality-assessment-framework.ts",
+      "exports": [
+        "Evidence",
+        "QualityItem",
+        "QualityDomain",
+        "QualityAssessment",
+        "QUALITY_TOOL_MAPPING",
+        "getRecommendedQualityTools",
+        "createQualityItem",
+        "createQualityDomain"
+      ],
+      "lines": 454
+    },
+    {
+      "name": "restore-point-manager",
+      "file": "restore-point-manager.ts",
+      "exports": [
+        "ProjectState",
+        "FileState",
+        "RestorePointMetadata",
+        "DeltaChange",
+        "RestorePointManager",
+        "restorePointManager"
+      ],
+      "lines": 717
+    },
+    {
+      "name": "retry",
+      "file": "retry.ts",
+      "exports": [
+        "RetryOptions",
+        "withRetry",
+        "retry"
+      ],
+      "lines": 228
+    },
+    {
+      "name": "study-design-keywords",
+      "file": "study-design-keywords.ts",
+      "exports": [
+        "WeightedKeyword",
+        "STUDY_DESIGN_KEYWORDS",
+        "EXCLUSION_KEYWORDS",
+        "getKeywordsForDesign",
+        "getExclusionKeywordsForDesign",
+        "getAllKeywords"
+      ],
+      "lines": 516
+    },
+    {
+      "name": "study-design-taxonomy",
+      "file": "study-design-taxonomy.ts",
+      "exports": [
+        "StudyDesignMetadata",
+        "STUDY_DESIGN_TAXONOMY",
+        "getStudyDesignMetadata",
+        "getStudyDesignsByCategory",
+        "getStudyDesignHierarchy",
+        "findStudyDesignByAlias"
+      ],
+      "lines": 1630
+    },
+    {
+      "name": "telegram-notifier",
+      "file": "telegram-notifier.ts",
+      "exports": [
+        "NotificationEvent",
+        "NotificationPriority",
+        "TelegramNotification",
+        "TelegramNotifier",
+        "telegramNotifier",
+        "sendTelegramNotification"
+      ],
+      "lines": 463
+    },
+    {
+      "name": "validation",
+      "file": "validation.ts",
+      "exports": [
+        "CommonSchemas",
+        "PlagiarismSchemas",
+        "DatabaseSchemas",
+        "validate",
+        "validateSafe"
+      ],
+      "lines": 183
+    },
+    {
+      "name": "workspace-config",
+      "file": "workspace-config.ts",
+      "exports": [
+        "ResearchType",
+        "TemplateFormat",
+        "ArchiveStrategy",
+        "BackupFrequency",
+        "FolderStructure",
+        "NamingConvention",
+        "TemplateConfig",
+        "ZoteroConfig",
+        "ProgressConfig",
+        "BackupConfig",
+        "ArchiveConfig",
+        "TelegramConfig",
+        "ExportConfig",
+        "ResearchTypeConfig",
+        "GlobalWorkspaceConfig",
+        "ProjectWorkspaceConfig",
+        "DEFAULT_GLOBAL_CONFIG",
+        "WorkspaceConfigManager",
+        "configManager"
+      ],
+      "lines": 627
+    },
+    {
+      "name": "workspace-templates",
+      "file": "workspace-templates.ts",
+      "exports": [
+        "FolderTemplate",
+        "FileTemplate",
+        "getBaseFolderStructure",
+        "getResearchTypeSpecificFolders",
+        "getCompleteFolderStructure",
+        "createFolderStructure",
+        "getReadmeTemplate",
+        "getMetadataTemplate",
+        "getProgressTemplate",
+        "getProgressMarkdownTemplate",
+        "getHtmlDashboardTemplate",
+        "TemplateManager",
+        "templateManager"
+      ],
+      "lines": 1132
+    }
+  ],
+  "documentation": {
+    "total": 95,
+    "byCategory": {
+      "root": [
+        {
+          "name": "AGENT-ENHANCEMENT-RESEARCH.md",
+          "path": "docs\\AGENT-ENHANCEMENT-RESEARCH.md",
+          "size": 70007,
+          "lines": 2595,
+          "lastModified": "2025-12-04T22:37:14.751Z"
+        },
+        {
+          "name": "AGENT-UPGRADE-PLAN-V5.md",
+          "path": "docs\\AGENT-UPGRADE-PLAN-V5.md",
+          "size": 18787,
+          "lines": 737,
+          "lastModified": "2025-12-06T01:06:43.517Z"
+        },
+        {
+          "name": "API-INTEGRATION-QUICK-REFERENCE.md",
+          "path": "docs\\API-INTEGRATION-QUICK-REFERENCE.md",
+          "size": 6820,
+          "lines": 276,
+          "lastModified": "2025-12-13T12:06:16.542Z"
+        },
+        {
+          "name": "API-INTEGRATION-RESEARCH-REPORT.md",
+          "path": "docs\\API-INTEGRATION-RESEARCH-REPORT.md",
+          "size": 64901,
+          "lines": 2409,
+          "lastModified": "2025-12-13T12:05:33.810Z"
+        },
+        {
+          "name": "API-KEYS-REGISTRATION-GUIDE.md",
+          "path": "docs\\API-KEYS-REGISTRATION-GUIDE.md",
+          "size": 11180,
+          "lines": 445,
+          "lastModified": "2025-12-13T12:40:11.147Z"
+        },
+        {
+          "name": "API-KEYS-TEST-RESULTS.md",
+          "path": "docs\\API-KEYS-TEST-RESULTS.md",
+          "size": 9481,
+          "lines": 373,
+          "lastModified": "2025-12-13T12:44:35.863Z"
+        },
+        {
+          "name": "ASSUMPTION-CHECKING-GUIDE.md",
+          "path": "docs\\ASSUMPTION-CHECKING-GUIDE.md",
+          "size": 26605,
+          "lines": 959,
+          "lastModified": "2025-12-04T11:42:48.229Z"
+        },
+        {
+          "name": "CHANGELOG.md",
+          "path": "docs\\CHANGELOG.md",
+          "size": 12818,
+          "lines": 386,
+          "lastModified": "2025-12-04T11:08:24.385Z"
+        },
+        {
+          "name": "COMPLETE-PROJECT-SUMMARY-DEC-6-2025.md",
+          "path": "docs\\COMPLETE-PROJECT-SUMMARY-DEC-6-2025.md",
+          "size": 12085,
+          "lines": 409,
+          "lastModified": "2025-12-06T21:44:31.464Z"
+        },
+        {
+          "name": "CUSTOM-COMMANDS-SUMMARY.md",
+          "path": "docs\\CUSTOM-COMMANDS-SUMMARY.md",
+          "size": 8689,
+          "lines": 344,
+          "lastModified": "2025-12-06T00:56:29.766Z"
+        },
+        {
+          "name": "DATA-ANALYSIS-AGENT-RESEARCH.md",
+          "path": "docs\\DATA-ANALYSIS-AGENT-RESEARCH.md",
+          "size": 49566,
+          "lines": 1849,
+          "lastModified": "2025-12-04T10:50:23.236Z"
+        },
+        {
+          "name": "DEPLOYMENT-GUIDE.md",
+          "path": "docs\\DEPLOYMENT-GUIDE.md",
+          "size": 14719,
+          "lines": 742,
+          "lastModified": "2025-12-05T13:04:17.721Z"
+        },
+        {
+          "name": "DEVELOPMENT.md",
+          "path": "docs\\DEVELOPMENT.md",
+          "size": 14089,
+          "lines": 702,
+          "lastModified": "2025-12-04T10:33:06.335Z"
+        },
+        {
+          "name": "ERROR-TRACKING-GUIDE.md",
+          "path": "docs\\ERROR-TRACKING-GUIDE.md",
+          "size": 12350,
+          "lines": 633,
+          "lastModified": "2025-12-05T13:29:00.645Z"
+        },
+        {
+          "name": "FINAL-100-PERCENT-ATTEMPT-DEC-13-2025.md",
+          "path": "docs\\FINAL-100-PERCENT-ATTEMPT-DEC-13-2025.md",
+          "size": 14648,
+          "lines": 487,
+          "lastModified": "2025-12-13T11:45:16.068Z"
+        },
+        {
+          "name": "FINAL-COMPLETE-SUMMARY-DEC-6-2025.md",
+          "path": "docs\\FINAL-COMPLETE-SUMMARY-DEC-6-2025.md",
+          "size": 10310,
+          "lines": 378,
+          "lastModified": "2025-12-06T21:48:54.015Z"
+        },
+        {
+          "name": "FINAL-PROJECT-COMPLETION-DEC-13-2025.md",
+          "path": "docs\\FINAL-PROJECT-COMPLETION-DEC-13-2025.md",
+          "size": 30861,
+          "lines": 975,
+          "lastModified": "2025-12-13T07:03:12.099Z"
+        },
+        {
+          "name": "FINAL-PROJECT-SUMMARY-DEC-6-2025.md",
+          "path": "docs\\FINAL-PROJECT-SUMMARY-DEC-6-2025.md",
+          "size": 15798,
+          "lines": 502,
+          "lastModified": "2025-12-06T21:36:41.379Z"
+        },
+        {
+          "name": "FINAL-PROJECT-SUMMARY.md",
+          "path": "docs\\FINAL-PROJECT-SUMMARY.md",
+          "size": 14761,
+          "lines": 517,
+          "lastModified": "2025-12-05T13:09:19.365Z"
+        },
+        {
+          "name": "FINAL-SUMMARY-DEC-5-2025.md",
+          "path": "docs\\FINAL-SUMMARY-DEC-5-2025.md",
+          "size": 12759,
+          "lines": 392,
+          "lastModified": "2025-12-05T12:38:38.923Z"
+        },
+        {
+          "name": "FUNCTIONAL-TEST-REPORT-DEC-5-2025.md",
+          "path": "docs\\FUNCTIONAL-TEST-REPORT-DEC-5-2025.md",
+          "size": 13743,
+          "lines": 369,
+          "lastModified": "2025-12-05T12:25:17.398Z"
+        },
+        {
+          "name": "FUTURE-ENHANCEMENTS-ROADMAP.md",
+          "path": "docs\\FUTURE-ENHANCEMENTS-ROADMAP.md",
+          "size": 13465,
+          "lines": 499,
+          "lastModified": "2025-12-13T12:18:14.746Z"
+        },
+        {
+          "name": "GUIDES.md",
+          "path": "docs\\GUIDES.md",
+          "size": 13034,
+          "lines": 678,
+          "lastModified": "2025-12-04T10:35:15.520Z"
+        },
+        {
+          "name": "IMPLEMENTATION-PROGRESS-DEC-5-2025.md",
+          "path": "docs\\IMPLEMENTATION-PROGRESS-DEC-5-2025.md",
+          "size": 10677,
+          "lines": 405,
+          "lastModified": "2025-12-05T11:19:13.537Z"
+        },
+        {
+          "name": "IMPLEMENTATION-SUMMARY-DEC-5-2025.md",
+          "path": "docs\\IMPLEMENTATION-SUMMARY-DEC-5-2025.md",
+          "size": 16040,
+          "lines": 546,
+          "lastModified": "2025-12-05T16:22:37.226Z"
+        },
+        {
+          "name": "INTEGRATION-COMPLETE-DEC-5-2025.md",
+          "path": "docs\\INTEGRATION-COMPLETE-DEC-5-2025.md",
+          "size": 10791,
+          "lines": 330,
+          "lastModified": "2025-12-06T01:07:03.222Z"
+        },
+        {
+          "name": "INTEGRATION-TEST-REPORT-DEC-5-2025.md",
+          "path": "docs\\INTEGRATION-TEST-REPORT-DEC-5-2025.md",
+          "size": 11616,
+          "lines": 404,
+          "lastModified": "2025-12-05T12:18:34.571Z"
+        },
+        {
+          "name": "LOGGING-SYSTEM-RESEARCH.md",
+          "path": "docs\\LOGGING-SYSTEM-RESEARCH.md",
+          "size": 17891,
+          "lines": 602,
+          "lastModified": "2025-12-05T16:02:37.416Z"
+        },
+        {
+          "name": "MAINTENANCE-PLAN.md",
+          "path": "docs\\MAINTENANCE-PLAN.md",
+          "size": 14785,
+          "lines": 651,
+          "lastModified": "2025-12-05T13:02:40.962Z"
+        },
+        {
+          "name": "MASTER-PLAN.md",
+          "path": "docs\\MASTER-PLAN.md",
+          "size": 50116,
+          "lines": 1504,
+          "lastModified": "2025-12-03T00:01:46.952Z"
+        },
+        {
+          "name": "ML-CLASSIFIER-OPTIONS-COMPARISON.md",
+          "path": "docs\\ML-CLASSIFIER-OPTIONS-COMPARISON.md",
+          "size": 17838,
+          "lines": 522,
+          "lastModified": "2025-12-06T03:33:13.404Z"
+        },
+        {
+          "name": "PHASE-1-1-3-ML-CLASSIFIER-PLAN.md",
+          "path": "docs\\PHASE-1-1-3-ML-CLASSIFIER-PLAN.md",
+          "size": 5555,
+          "lines": 233,
+          "lastModified": "2025-12-06T03:05:44.641Z"
+        },
+        {
+          "name": "PHASE-1-COMPLETION-SUMMARY.md",
+          "path": "docs\\PHASE-1-COMPLETION-SUMMARY.md",
+          "size": 12173,
+          "lines": 449,
+          "lastModified": "2025-12-05T12:00:59.558Z"
+        },
+        {
+          "name": "PHASE-1-COMPLETION-V6.0.0-BETA.md",
+          "path": "docs\\PHASE-1-COMPLETION-V6.0.0-BETA.md",
+          "size": 14101,
+          "lines": 358,
+          "lastModified": "2025-12-06T04:36:42.723Z"
+        },
+        {
+          "name": "PHASE-1-TEST-RESULTS-V6.0.0-BETA.md",
+          "path": "docs\\PHASE-1-TEST-RESULTS-V6.0.0-BETA.md",
+          "size": 12445,
+          "lines": 318,
+          "lastModified": "2025-12-06T04:33:33.048Z"
+        },
+        {
+          "name": "PHASE-1-TO-PHASE-2-TRANSITION.md",
+          "path": "docs\\PHASE-1-TO-PHASE-2-TRANSITION.md",
+          "size": 9010,
+          "lines": 301,
+          "lastModified": "2025-12-06T05:01:55.186Z"
+        },
+        {
+          "name": "PHASE-10.2-COCHRANE-LIBRARY-COMPLETE.md",
+          "path": "docs\\PHASE-10.2-COCHRANE-LIBRARY-COMPLETE.md",
+          "size": 9663,
+          "lines": 395,
+          "lastModified": "2025-12-06T23:49:05.487Z"
+        },
+        {
+          "name": "PHASE-10.3-PROSPERO-REGISTRATION-COMPLETE.md",
+          "path": "docs\\PHASE-10.3-PROSPERO-REGISTRATION-COMPLETE.md",
+          "size": 11156,
+          "lines": 449,
+          "lastModified": "2025-12-12T20:58:14.245Z"
+        },
+        {
+          "name": "PHASE-2-COMPLETION-SUMMARY.md",
+          "path": "docs\\PHASE-2-COMPLETION-SUMMARY.md",
+          "size": 13119,
+          "lines": 369,
+          "lastModified": "2025-12-05T12:57:44.249Z"
+        },
+        {
+          "name": "PHASE-2-FINAL-COMPLETION-SUMMARY.md",
+          "path": "docs\\PHASE-2-FINAL-COMPLETION-SUMMARY.md",
+          "size": 13587,
+          "lines": 401,
+          "lastModified": "2025-12-13T15:49:12.123Z"
+        },
+        {
+          "name": "PHASE-2-IMPLEMENTATION-PLAN.md",
+          "path": "docs\\PHASE-2-IMPLEMENTATION-PLAN.md",
+          "size": 11693,
+          "lines": 407,
+          "lastModified": "2025-12-05T12:41:38.733Z"
+        },
+        {
+          "name": "PHASE-2-PLAN-QUALITY-ASSESSMENT.md",
+          "path": "docs\\PHASE-2-PLAN-QUALITY-ASSESSMENT.md",
+          "size": 12992,
+          "lines": 406,
+          "lastModified": "2025-12-06T04:43:15.244Z"
+        },
+        {
+          "name": "PHASE-2-QUALITY-TOOLS-COMPLETE.md",
+          "path": "docs\\PHASE-2-QUALITY-TOOLS-COMPLETE.md",
+          "size": 11049,
+          "lines": 369,
+          "lastModified": "2025-12-06T06:47:46.723Z"
+        },
+        {
+          "name": "PHASE-3-COMPLETION-SUMMARY.md",
+          "path": "docs\\PHASE-3-COMPLETION-SUMMARY.md",
+          "size": 14044,
+          "lines": 415,
+          "lastModified": "2025-12-13T16:19:28.753Z"
+        },
+        {
+          "name": "PHASE-3-TEST-DOCUMENTATION.md",
+          "path": "docs\\PHASE-3-TEST-DOCUMENTATION.md",
+          "size": 10690,
+          "lines": 427,
+          "lastModified": "2025-12-13T16:24:40.321Z"
+        },
+        {
+          "name": "PHASE-4-COMPLETION-SUMMARY.md",
+          "path": "docs\\PHASE-4-COMPLETION-SUMMARY.md",
+          "size": 10174,
+          "lines": 315,
+          "lastModified": "2025-12-06T13:32:49.588Z"
+        },
+        {
+          "name": "PHASE-5-COMPLETION-SUMMARY.md",
+          "path": "docs\\PHASE-5-COMPLETION-SUMMARY.md",
+          "size": 14695,
+          "lines": 522,
+          "lastModified": "2025-12-06T19:30:25.017Z"
+        },
+        {
+          "name": "PHASE-7-COMPLETION-SUMMARY.md",
+          "path": "docs\\PHASE-7-COMPLETION-SUMMARY.md",
+          "size": 12484,
+          "lines": 392,
+          "lastModified": "2025-12-06T20:29:07.068Z"
+        },
+        {
+          "name": "PHASE-8-COMPLETION-SUMMARY.md",
+          "path": "docs\\PHASE-8-COMPLETION-SUMMARY.md",
+          "size": 12620,
+          "lines": 415,
+          "lastModified": "2025-12-06T22:54:19.197Z"
+        },
+        {
+          "name": "PHASE-8.5-COMPLETION-SUMMARY.md",
+          "path": "docs\\PHASE-8.5-COMPLETION-SUMMARY.md",
+          "size": 10112,
+          "lines": 367,
+          "lastModified": "2025-12-06T22:55:17.740Z"
+        },
+        {
+          "name": "PHASE-9-COMPLETION-SUMMARY.md",
+          "path": "docs\\PHASE-9-COMPLETION-SUMMARY.md",
+          "size": 10988,
+          "lines": 390,
+          "lastModified": "2025-12-06T23:29:05.077Z"
+        },
+        {
+          "name": "POWER-ANALYSIS-GUIDE.md",
+          "path": "docs\\POWER-ANALYSIS-GUIDE.md",
+          "size": 26834,
+          "lines": 1028,
+          "lastModified": "2025-12-04T11:45:12.866Z"
+        },
+        {
+          "name": "PROJECT-INDEPENDENCE-FIX.md",
+          "path": "docs\\PROJECT-INDEPENDENCE-FIX.md",
+          "size": 12729,
+          "lines": 385,
+          "lastModified": "2025-12-06T01:08:52.444Z"
+        },
+        {
+          "name": "PROJECT-STATUS-DEC-6-2025.md",
+          "path": "docs\\PROJECT-STATUS-DEC-6-2025.md",
+          "size": 19601,
+          "lines": 572,
+          "lastModified": "2025-12-06T20:30:56.718Z"
+        },
+        {
+          "name": "QUALITY-ASSESSMENT-GUIDE.md",
+          "path": "docs\\QUALITY-ASSESSMENT-GUIDE.md",
+          "size": 13303,
+          "lines": 521,
+          "lastModified": "2025-12-06T05:05:48.502Z"
+        },
+        {
+          "name": "REPORTING-GUIDELINES.md",
+          "path": "docs\\REPORTING-GUIDELINES.md",
+          "size": 26170,
+          "lines": 912,
+          "lastModified": "2025-12-04T11:47:50.316Z"
+        },
+        {
+          "name": "RESEARCH-WORKSPACE-SYSTEM-COMPLETE.md",
+          "path": "docs\\RESEARCH-WORKSPACE-SYSTEM-COMPLETE.md",
+          "size": 17533,
+          "lines": 606,
+          "lastModified": "2025-12-13T15:12:49.650Z"
+        },
+        {
+          "name": "RESTORE-ROLLBACK-GUIDE.md",
+          "path": "docs\\RESTORE-ROLLBACK-GUIDE.md",
+          "size": 18597,
+          "lines": 806,
+          "lastModified": "2025-12-05T16:20:03.964Z"
+        },
+        {
+          "name": "SESSION-PROMPT.md",
+          "path": "docs\\SESSION-PROMPT.md",
+          "size": 23878,
+          "lines": 727,
+          "lastModified": "2025-12-03T00:03:42.707Z"
+        },
+        {
+          "name": "SESSION-SUMMARY-DEC-13-2025-FINAL.md",
+          "path": "docs\\SESSION-SUMMARY-DEC-13-2025-FINAL.md",
+          "size": 15888,
+          "lines": 510,
+          "lastModified": "2025-12-13T11:29:16.959Z"
+        },
+        {
+          "name": "SESSION-SUMMARY-DEC-7-2025.md",
+          "path": "docs\\SESSION-SUMMARY-DEC-7-2025.md",
+          "size": 8899,
+          "lines": 325,
+          "lastModified": "2025-12-06T22:56:47.004Z"
+        },
+        {
+          "name": "SESSION-SUMMARY-PHASE-9-DEC-7-2025.md",
+          "path": "docs\\SESSION-SUMMARY-PHASE-9-DEC-7-2025.md",
+          "size": 8120,
+          "lines": 321,
+          "lastModified": "2025-12-06T23:29:55.749Z"
+        },
+        {
+          "name": "STATISTICAL-METHODS-GUIDE.md",
+          "path": "docs\\STATISTICAL-METHODS-GUIDE.md",
+          "size": 33967,
+          "lines": 1328,
+          "lastModified": "2025-12-04T11:15:07.193Z"
+        },
+        {
+          "name": "STUDY-DESIGN-CAPABILITIES-RESEARCH.md",
+          "path": "docs\\STUDY-DESIGN-CAPABILITIES-RESEARCH.md",
+          "size": 27700,
+          "lines": 875,
+          "lastModified": "2025-12-06T01:31:47.100Z"
+        },
+        {
+          "name": "STUDY-DESIGN-TAXONOMY.md",
+          "path": "docs\\STUDY-DESIGN-TAXONOMY.md",
+          "size": 15709,
+          "lines": 529,
+          "lastModified": "2025-12-06T01:49:34.121Z"
+        },
+        {
+          "name": "STUDY-DESIGN-UPGRADE-PLAN.md",
+          "path": "docs\\STUDY-DESIGN-UPGRADE-PLAN.md",
+          "size": 31206,
+          "lines": 1088,
+          "lastModified": "2025-12-06T01:34:23.091Z"
+        },
+        {
+          "name": "TEST-RESULTS-DEC-13-2025.md",
+          "path": "docs\\TEST-RESULTS-DEC-13-2025.md",
+          "size": 12694,
+          "lines": 376,
+          "lastModified": "2025-12-13T11:13:13.139Z"
+        },
+        {
+          "name": "TESTING-SUMMARY-REPORT.md",
+          "path": "docs\\TESTING-SUMMARY-REPORT.md",
+          "size": 12244,
+          "lines": 353,
+          "lastModified": "2025-12-06T06:55:48.444Z"
+        },
+        {
+          "name": "TESTING.md",
+          "path": "docs\\TESTING.md",
+          "size": 12065,
+          "lines": 580,
+          "lastModified": "2025-12-04T10:34:03.724Z"
+        },
+        {
+          "name": "ULTIMATE-PROJECT-SUMMARY-DEC-6-2025.md",
+          "path": "docs\\ULTIMATE-PROJECT-SUMMARY-DEC-6-2025.md",
+          "size": 19650,
+          "lines": 719,
+          "lastModified": "2025-12-06T22:38:02.741Z"
+        },
+        {
+          "name": "ZOTERO-EUROPE-PMC-IMPLEMENTATION-SUMMARY.md",
+          "path": "docs\\ZOTERO-EUROPE-PMC-IMPLEMENTATION-SUMMARY.md",
+          "size": 12661,
+          "lines": 470,
+          "lastModified": "2025-12-13T13:22:17.420Z"
+        }
+      ],
+      "archive": [
+        {
+          "name": "AGENT-TEST-RESULTS.md",
+          "path": "docs\\archive\\AGENT-TEST-RESULTS.md",
+          "size": 7529,
+          "lines": 305,
+          "lastModified": "2025-12-03T01:00:04.105Z"
+        },
+        {
+          "name": "CRITICAL-FIXES-SUMMARY.md",
+          "path": "docs\\archive\\CRITICAL-FIXES-SUMMARY.md",
+          "size": 8257,
+          "lines": 334,
+          "lastModified": "2025-12-03T01:55:13.296Z"
+        },
+        {
+          "name": "DATABASE-INTEGRATIONS.md",
+          "path": "docs\\archive\\DATABASE-INTEGRATIONS.md",
+          "size": 14963,
+          "lines": 526,
+          "lastModified": "2025-12-03T04:00:39.988Z"
+        },
+        {
+          "name": "FINAL-SESSION-SUMMARY.md",
+          "path": "docs\\archive\\FINAL-SESSION-SUMMARY.md",
+          "size": 12433,
+          "lines": 476,
+          "lastModified": "2025-12-03T02:54:06.294Z"
+        },
+        {
+          "name": "FUTURE-TASK-PORTABLE-DISTRIBUTION.md",
+          "path": "docs\\archive\\FUTURE-TASK-PORTABLE-DISTRIBUTION.md",
+          "size": 27937,
+          "lines": 1024,
+          "lastModified": "2025-12-03T03:47:48.147Z"
+        },
+        {
+          "name": "GIT-COMMIT-SUMMARY.md",
+          "path": "docs\\archive\\GIT-COMMIT-SUMMARY.md",
+          "size": 4465,
+          "lines": 184,
+          "lastModified": "2025-12-06T01:05:52.548Z"
+        },
+        {
+          "name": "IMPROVEMENT-RESEARCH.md",
+          "path": "docs\\archive\\IMPROVEMENT-RESEARCH.md",
+          "size": 38090,
+          "lines": 1562,
+          "lastModified": "2025-12-04T09:54:22.194Z"
+        },
+        {
+          "name": "IMPROVEMENT-ROADMAP.md",
+          "path": "docs\\archive\\IMPROVEMENT-ROADMAP.md",
+          "size": 25989,
+          "lines": 1152,
+          "lastModified": "2025-12-03T01:50:33.483Z"
+        },
+        {
+          "name": "MCP-TOOLS-TEST-SUMMARY.md",
+          "path": "docs\\archive\\MCP-TOOLS-TEST-SUMMARY.md",
+          "size": 11320,
+          "lines": 414,
+          "lastModified": "2025-12-03T02:13:42.494Z"
+        },
+        {
+          "name": "NEW-DATABASES-ADDED.md",
+          "path": "docs\\archive\\NEW-DATABASES-ADDED.md",
+          "size": 11787,
+          "lines": 405,
+          "lastModified": "2025-12-03T04:07:35.241Z"
+        },
+        {
+          "name": "PHASE1-COMPLETION-SUMMARY.md",
+          "path": "docs\\archive\\PHASE1-COMPLETION-SUMMARY.md",
+          "size": 9419,
+          "lines": 313,
+          "lastModified": "2025-12-03T00:42:42.007Z"
+        },
+        {
+          "name": "PHASE1-TEST-RESULTS.md",
+          "path": "docs\\archive\\PHASE1-TEST-RESULTS.md",
+          "size": 6767,
+          "lines": 266,
+          "lastModified": "2025-12-03T00:41:51.615Z"
+        },
+        {
+          "name": "PHASE2-COMPLETION-SUMMARY.md",
+          "path": "docs\\archive\\PHASE2-COMPLETION-SUMMARY.md",
+          "size": 15406,
+          "lines": 540,
+          "lastModified": "2025-12-03T01:15:57.644Z"
+        },
+        {
+          "name": "PHASE3-COMPLETION-SUMMARY.md",
+          "path": "docs\\archive\\PHASE3-COMPLETION-SUMMARY.md",
+          "size": 18080,
+          "lines": 610,
+          "lastModified": "2025-12-03T01:34:48.458Z"
+        },
+        {
+          "name": "PLAGIARISM-DETECTION-GUIDE.md",
+          "path": "docs\\archive\\PLAGIARISM-DETECTION-GUIDE.md",
+          "size": 15403,
+          "lines": 619,
+          "lastModified": "2025-12-03T12:17:40.312Z"
+        },
+        {
+          "name": "SESSION-COMPLETE-DEC-4-2025.md",
+          "path": "docs\\archive\\SESSION-COMPLETE-DEC-4-2025.md",
+          "size": 48,
+          "lines": 2,
+          "lastModified": "2025-12-04T09:59:00.534Z"
+        },
+        {
+          "name": "SESSION-PROGRESS-DEC-3-2025.md",
+          "path": "docs\\archive\\SESSION-PROGRESS-DEC-3-2025.md",
+          "size": 7522,
+          "lines": 270,
+          "lastModified": "2025-12-06T01:06:34.097Z"
+        },
+        {
+          "name": "SESSION-SUMMARY-DEC-3-2025.md",
+          "path": "docs\\archive\\SESSION-SUMMARY-DEC-3-2025.md",
+          "size": 13496,
+          "lines": 471,
+          "lastModified": "2025-12-03T00:05:12.403Z"
+        },
+        {
+          "name": "STATUS-DASHBOARD-GUIDE.md",
+          "path": "docs\\archive\\STATUS-DASHBOARD-GUIDE.md",
+          "size": 13124,
+          "lines": 576,
+          "lastModified": "2025-12-03T02:21:09.882Z"
+        },
+        {
+          "name": "TEST-RESULTS-DEC-3-2025.md",
+          "path": "docs\\archive\\TEST-RESULTS-DEC-3-2025.md",
+          "size": 7530,
+          "lines": 284,
+          "lastModified": "2025-12-03T04:12:19.563Z"
+        },
+        {
+          "name": "TYPESCRIPT-BUILD-FIX-SUMMARY.md",
+          "path": "docs\\archive\\TYPESCRIPT-BUILD-FIX-SUMMARY.md",
+          "size": 8827,
+          "lines": 296,
+          "lastModified": "2025-12-03T02:06:58.154Z"
+        },
+        {
+          "name": "VSCODE-QUICK-START.md",
+          "path": "docs\\archive\\VSCODE-QUICK-START.md",
+          "size": 4297,
+          "lines": 168,
+          "lastModified": "2025-12-03T03:22:21.300Z"
+        },
+        {
+          "name": "WEEK1-QUICKWINS-UPGRADE-SUMMARY.md",
+          "path": "docs\\archive\\WEEK1-QUICKWINS-UPGRADE-SUMMARY.md",
+          "size": 13811,
+          "lines": 505,
+          "lastModified": "2025-12-04T10:23:22.704Z"
+        }
+      ],
+      "reference": [
+        {
+          "name": "STUDY-DESIGNS-GUIDE.md",
+          "path": "docs\\reference\\STUDY-DESIGNS-GUIDE.md",
+          "size": 27873,
+          "lines": 307,
+          "lastModified": "2025-12-05T13:39:39.950Z"
+        }
+      ]
+    }
+  },
+  "structure": {
+    "name": "medresearch-ai",
+    "version": "6.2.0",
+    "description": "MedResearch AI - Multi-Agent System for Systematic Reviews with Advanced Biostatistics & Memory",
+    "dependencies": 9,
+    "devDependencies": 8,
+    "scripts": [
+      "build",
+      "dev",
+      "test",
+      "test:meta",
+      "test:databases",
+      "test:plagiarism",
+      "test:all",
+      "dashboard",
+      "dashboard:watch",
+      "monitor",
+      "restore",
+      "rollback",
+      "lint",
+      "format"
+    ]
+  }
+}

@@ -158,9 +158,9 @@ Files to be created in next commits:
 
 ## 🔗 Related Files
 
-- **Master Plan**: `../MEDRESEARCH-AI-MASTER-PLAN-V4.md`
-- **Session Prompt**: `../ENHANCED-SESSION-PROMPT-V4.md`
-- **Session Summary**: `../SESSION-SUMMARY-DEC-3-2025.md`
+- **Master Plan**: `../MASTER-PLAN.md`
+- **Session Prompt**: `../SESSION-PROMPT.md`
+- **Session Summary**: `SESSION-SUMMARY-DEC-3-2025.md`
 
 ---
 
